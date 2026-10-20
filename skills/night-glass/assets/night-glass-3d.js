@@ -9,7 +9,7 @@
 //   const hero = await mountHero(canvas, { model: 'puck', screen: myCanvas, onTap, onSpin, onPowered })
 //   model: 'puck' | 'slab' | your own builder function | 'path/to/model.glb' | { url, screen: 'ScreenMeshName', spin, tilt }
 //   hero.dispose(): release WebGL
-//   onSpin(delta): rotation in radians. On 'puck' the rim turns (like a real dial); on 'slab' and custom models the whole object turns
+//   onSpin(delta): rotation in radians. On 'puck' the rim turns like a real dial: circle around its face, clockwise = up; on 'slab' and custom models a drag turns the whole object
 //   hero.setGlow('255,159,90'); hero.screenChanged(); hero.hop()
 // If WebGL is unavailable it throws: catch it and show a flat image (class .no-gl on the parent).
 import * as THREE from 'three';
@@ -170,11 +170,17 @@ export async function mountHero(cv, opts = {}) {
   cv.addEventListener('pointermove', e => {
     if (!drag.on) { cv.style.cursor = hits(e) ? 'grab' : 'default'; return; }
     if (!drag.hit) return;
-    const now = performance.now(), dx = e.clientX - drag.x, dy = e.clientY - drag.y, dts = Math.max(0.008, (now - drag.t) / 1000);
+    const now = performance.now(), px = drag.x, py = drag.y, dx = e.clientX - px, dy = e.clientY - py, dts = Math.max(0.008, (now - drag.t) / 1000);
     drag.x = e.clientX; drag.y = e.clientY; drag.t = now; drag.moved += Math.abs(dx) + Math.abs(dy);
     if (e.pointerType === 'touch' && drag.moved < 12 && Math.abs(dy) > Math.abs(dx)) return;   // this is page scrolling
-    if (M.spinner) {   // dial: horizontal movement spins the rim around its axis, with inertia
-      knob.v = -dx * 0.011 / dts; turn(-dx * 0.011);
+    if (M.spinner) {   // dial: circling around its face turns it like a real knob (clockwise = up), with inertia
+      const c = faceCenter(), r0 = Math.hypot(px - c.x, py - c.y), r1 = Math.hypot(e.clientX - c.x, e.clientY - c.y);
+      let d = dx * 0.011;   // right at the centre the angle jumps around, so a horizontal drag stands in
+      if (r0 > 14 && r1 > 14) {
+        d = Math.atan2(e.clientY - c.y, e.clientX - c.x) - Math.atan2(py - c.y, px - c.x);
+        d = ((d + Math.PI * 3) % (Math.PI * 2)) - Math.PI;   // shortest way round, no jump at ±180°
+      }
+      knob.v = -d / dts; turn(-d);
     } else {
       spin.y += dx * 0.011; spin.x = Math.max(-1.1, Math.min(1.1, spin.x + dy * 0.009));
       spin.vy = dx * 0.011 / dts; spin.vx = dy * 0.009 / dts; onSpin(dx * 0.011);
@@ -187,8 +193,14 @@ export async function mountHero(cv, opts = {}) {
   };
   cv.addEventListener('pointerup', release); cv.addEventListener('pointercancel', release);
   function hop() { b.vy += 2.6; b.vsq -= 2.6; }
-  const knob = { v: 0 };
+  const knob = { v: 0 }, _fc = new THREE.Vector3();
   function turn(d) { M.spinner.rotation.y += d; onSpin(-d); }
+  // where the dial face is on the page: the pivot for the circular gesture
+  function faceCenter() {
+    M.screen.getWorldPosition(_fc).project(camera);
+    const r = cv.getBoundingClientRect();
+    return { x: r.left + (_fc.x + 1) / 2 * r.width, y: r.top + (1 - _fc.y) / 2 * r.height };
+  }
 
   // glow
   const g0 = glow.split(',').map(Number), glowC = { r: g0[0], g: g0[1], b: g0[2] }, glowTo = { ...glowC };

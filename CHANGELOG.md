@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.1 — 2026-10-20
+- 3D dial (`puck`): circling around its face turns it like a real knob, clockwise = up, with inertia. Right at the centre, where the angle is unstable, a horizontal drag still works.
+
 ## 1.7.0 — 2026-10-20
 - English only: code comments, UI strings, demos, docs, tests and the Pages site. Demos use the en-US locale and US dollar prices (Orbi $79, Orbi Pro $129).
 - Charts: the last x-axis label no longer collides with its neighbor; the donut legend wraps a long value instead of clipping it.
