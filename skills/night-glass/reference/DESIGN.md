@@ -210,7 +210,7 @@ Alternatives if you need a different voice at the same proportions: Geist + Geis
 
 - **Page margins** `--pad: max(16px, 4vw)` grow with the window. Content is `max-width: 1120px`, text and FAQ 760px, leads 560–600px.
 - **Section rhythm** `padding-top: clamp(110px, 14vw, 180px)`: there is emptiness between sections, not lines. The section header is centered: eyebrow → title → gray paragraph, then `clamp(48px,6vw,72px)` to the content.
-- **Hero** fills the screen (`100svh`, minimum 640px), a grid of three rows: the headline on top, the scene with the object in the middle (it takes the free space), lead + buttons + note at the bottom. The header appears only after the hero has assembled.
+- **Hero** fills the screen (`--vh-stable`, minimum 640px; on touch screens the height is pinned at load and refreshed only on rotation, because in-app browsers like Telegram resize the web view while you scroll and a `100svh` hero would shove the page), a grid of three rows: the headline on top, the scene with the object in the middle (it takes the free space), lead + buttons + note at the bottom. The header appears only after the hero has assembled.
 - **Grids:** tiles 3 → 2 (≤860px) → 1 (≤520px); steps 3 → 1; plans 2 → 1 (≤760px); facts 4 → 2 → 1; split 1fr 1fr → 1 centered column; before/after `.78fr 1.22fr`, the asymmetry is deliberate.
 - **Gallery:** a horizontal strip with snap that bleeds past the page margins (`margin: 0 calc(-1 * var(--pad))`), no scrollbar; round glass arrows on desktop, none on phones.
 - **Mobile:** the header is a logo, the main button and a burger (links drop down as a glass list, items 16px with 13px padding); CTA buttons stretch to 340px; everything is centered. No horizontal scroll at any width.

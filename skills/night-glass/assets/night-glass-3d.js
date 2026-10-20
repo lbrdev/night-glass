@@ -109,7 +109,8 @@ export async function mountHero(cv, opts = {}) {
   const { model = 'puck', screen: scr = null, glow = getComputedStyle(document.documentElement).getPropertyValue('--glow').trim() || '169,139,255',
     onTap = () => {}, onSpin = () => {}, onPowered = () => {}, anchor = null } = opts;
   const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  const touch = matchMedia('(pointer: coarse)').matches;
+  renderer.setPixelRatio(Math.min(devicePixelRatio, touch ? 1.5 : 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
 
@@ -139,11 +140,14 @@ export async function mountHero(cv, opts = {}) {
   const rig = new THREE.Group(); rig.add(M.group); scene.add(rig);
 
   // camera: the object fills the free row of the hero (anchor) and sits at its center
-  let halfW = 2;
+  let halfW = 2, sizeKey = '';
   function resize() {
     const w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return;
+    const s0 = (anchor || cv).getBoundingClientRect(), c0 = cv.getBoundingClientRect();
+    const k = [w, h, Math.round(s0.top - c0.top), Math.round(s0.height)].join();
+    if (k === sizeKey) return; sizeKey = k;   // mobile toolbars fire resize without changing the canvas
     renderer.setSize(w, h, false); camera.aspect = w / h;
-    const c = cv.getBoundingClientRect(), s = (anchor || cv).getBoundingClientRect();
+    const c = c0, s = s0;
     const slotH = Math.max(180, s.height), slotCy = s.top - c.top + s.height / 2;
     const tan = Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
     const d = Math.max(M.size.h / (2 * tan * 0.86 * slotH / h), M.size.w / (2 * tan * camera.aspect * 0.8));
@@ -257,7 +261,8 @@ export async function mountHero(cv, opts = {}) {
     ptr.y = lerp(ptr.y, idle ? Math.sin(now / 4100) * 0.3 : ptr.ty, 0.06);
     [look.y, look.vy] = spring(look.y, look.vy, ptr.x * 0.5, 38, 7.5, dt);
     [look.x, look.vx] = spring(look.x, look.vx, ptr.y * 0.12, 50, 9, dt);
-    const sy = Math.max(0, -cv.getBoundingClientRect().top / innerHeight);   // how far the scene itself is scrolled (for the hero this equals page scroll)
+    // how far the scene itself is scrolled; skipped on touch, where scroll runs ahead of this frame and the object would shake
+    const sy = touch ? 0 : Math.max(0, -cv.getBoundingClientRect().top / cv.clientHeight);
     rig.position.y = b.y + sy * 0.25;
     rig.rotation.set(look.x + spin.x + sy * 0.3, look.y + spin.y, 0);
     rig.scale.set(b.s / Math.sqrt(b.sq), b.s * b.sq, b.s / Math.sqrt(b.sq));

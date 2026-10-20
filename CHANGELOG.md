@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.6 — 2026-10-20
+- Smooth scrolling in in-app browsers (Telegram, Instagram). They resize the web view while you scroll, and the `100svh` hero grew and shrank with it, shoving the page by a toolbar height. On touch screens the hero height (`--vh-stable`, set by `night-glass.js`) is now taken at load and refreshed only when the width changes; with a mouse it still follows the window.
+- 3D hero on touch screens: no scroll-linked tilt (scroll runs ahead of the render frame there, so the object shook against the page), pixel ratio capped at 1.5, and a resize that doesn't change the canvas no longer reallocates the WebGL buffer.
+
 ## 1.7.5 — 2026-10-20
 - Safari: the Orbi demo dials (Modes, the side view, the comparison) are round again. The screen canvas is now absolutely positioned inside the square, because Safari let an in-flow canvas stretch the `aspect-ratio` box taller than wide.
 

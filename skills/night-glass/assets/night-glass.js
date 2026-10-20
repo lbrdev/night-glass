@@ -11,6 +11,16 @@
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.documentElement.classList.remove('no-js');
 
+// stable screen height (--vh-stable) for the hero. In-app browsers (Telegram, Instagram) resize the web view itself
+// while you scroll, so a 100svh hero would grow and shrink under the finger and shove the page. On touch screens the
+// height is taken once and refreshed only when the width changes (rotation); with a mouse it follows the window.
+{
+  const root = document.documentElement, coarse = matchMedia('(pointer: coarse)').matches;
+  let w = 0;
+  const pin = () => { if (coarse && innerWidth === w) return; w = innerWidth; root.style.setProperty('--vh-stable', innerHeight + 'px'); };
+  pin(); addEventListener('resize', pin);
+}
+
 // glass highlight + button parallax.
 // A button (.btn, .arr) is pulled ~3px toward the cursor and tilts up to ~4.5°; the label (.btn-l) floats above the glass
 // and shifts further, while the highlight follows the cursor. The rect is measured once on enter (otherwise a shifted
