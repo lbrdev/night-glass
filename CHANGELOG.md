@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.2 — 2026-10-20
+- 3D dial follows the finger 1:1: the cursor is cast onto the plane of the dial face, so the rim turns by exactly the angle you moved, even on a tilted, foreshortened dial. No inertia after release; the dial stops following the pointer while you hold it. `onSpin` may return `false` to act as an end stop (the rim then holds).
+
 ## 1.7.1 — 2026-10-20
 - 3D dial (`puck`): circling around its face turns it like a real knob, clockwise = up, with inertia. Right at the centre, where the angle is unstable, a horizontal drag still works.
 

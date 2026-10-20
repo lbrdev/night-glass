@@ -157,15 +157,21 @@ export async function mountHero(cv, opts = {}) {
   const spin = { y: reduced ? 0 : -2.6, x: reduced ? 0 : 0.5, vy: 0, vx: 0, at: 0 };
   const look = { y: 0, x: 0, vy: 0, vx: 0 };
   const ptr = { x: 0, y: 0, tx: 0, ty: 0, moved: performance.now() };
-  addEventListener('pointermove', e => { ptr.tx = e.clientX / innerWidth * 2 - 1; ptr.ty = e.clientY / innerHeight * 2 - 1; ptr.moved = performance.now(); }, { passive: true });
+  addEventListener('pointermove', e => {
+    ptr.moved = performance.now();
+    if (drag.on && drag.hit && M.spinner) return;   // while a hand holds the dial it stays put, so the rim tracks the finger
+    ptr.tx = e.clientX / innerWidth * 2 - 1; ptr.ty = e.clientY / innerHeight * 2 - 1;
+  }, { passive: true });
 
   // grab, spin, tap
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
   const drag = { on: false, x: 0, y: 0, t: 0, moved: 0, hit: false };
   const hits = e => { const r = cv.getBoundingClientRect(); ndc.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); ray.setFromCamera(ndc, camera); return ray.intersectObject(rig, true).length > 0; };
   cv.addEventListener('pointerdown', e => {
-    const hit = hits(e); Object.assign(drag, { on: true, x: e.clientX, y: e.clientY, t: performance.now(), moved: 0, hit });
-    if (!hit) return; spin.vy = spin.vx = 0; b.vsq += 2; cv.setPointerCapture(e.pointerId);   // “oops!” squash on grab
+    const hit = hits(e); Object.assign(drag, { on: true, x: e.clientX, y: e.clientY, t: performance.now(), moved: 0, hit, a: null });
+    if (!hit) return; spin.vy = spin.vx = 0; cv.setPointerCapture(e.pointerId);
+    if (M.spinner) drag.a = faceAngle(e);   // the dial: remember where on the rim it was grabbed
+    else b.vsq += 2;                        // a free object: a little “oops!” squash on grab
   });
   cv.addEventListener('pointermove', e => {
     if (!drag.on) { cv.style.cursor = hits(e) ? 'grab' : 'default'; return; }
@@ -173,14 +179,12 @@ export async function mountHero(cv, opts = {}) {
     const now = performance.now(), px = drag.x, py = drag.y, dx = e.clientX - px, dy = e.clientY - py, dts = Math.max(0.008, (now - drag.t) / 1000);
     drag.x = e.clientX; drag.y = e.clientY; drag.t = now; drag.moved += Math.abs(dx) + Math.abs(dy);
     if (e.pointerType === 'touch' && drag.moved < 12 && Math.abs(dy) > Math.abs(dx)) return;   // this is page scrolling
-    if (M.spinner) {   // dial: circling around its face turns it like a real knob (clockwise = up), with inertia
-      const c = faceCenter(), r0 = Math.hypot(px - c.x, py - c.y), r1 = Math.hypot(e.clientX - c.x, e.clientY - c.y);
-      let d = dx * 0.011;   // right at the centre the angle jumps around, so a horizontal drag stands in
-      if (r0 > 14 && r1 > 14) {
-        d = Math.atan2(e.clientY - c.y, e.clientX - c.x) - Math.atan2(py - c.y, px - c.x);
-        d = ((d + Math.PI * 3) % (Math.PI * 2)) - Math.PI;   // shortest way round, no jump at ±180°
-      }
-      knob.v = -d / dts; turn(-d);
+    if (M.spinner) {   // dial: the rim turns exactly as far as the finger went around it, 1:1, clockwise = up
+      const a = faceAngle(e);
+      if (a !== null && drag.a !== null) {
+        const d = ((a - drag.a + Math.PI * 3) % (Math.PI * 2)) - Math.PI;   // shortest way round, no jump at ±180°
+        if (turn(d)) drag.a = a;   // at an end stop the rim holds and the grab point stays where it was
+      } else drag.a = a;
     } else {
       spin.y += dx * 0.011; spin.x = Math.max(-1.1, Math.min(1.1, spin.x + dy * 0.009));
       spin.vy = dx * 0.011 / dts; spin.vx = dy * 0.009 / dts; onSpin(dx * 0.011);
@@ -189,17 +193,27 @@ export async function mountHero(cv, opts = {}) {
   });
   const release = () => {
     if (!drag.on) return; drag.on = false; spin.at = performance.now(); cv.style.cursor = 'grab';
-    if (drag.hit && drag.moved < 6) { knob.v = 0; hop(); onTap(); }
+    if (drag.hit && drag.moved < 6) { hop(); onTap(); }
   };
   cv.addEventListener('pointerup', release); cv.addEventListener('pointercancel', release);
   function hop() { b.vy += 2.6; b.vsq -= 2.6; }
-  const knob = { v: 0 }, _fc = new THREE.Vector3();
-  function turn(d) { M.spinner.rotation.y += d; onSpin(-d); }
-  // where the dial face is on the page: the pivot for the circular gesture
-  function faceCenter() {
-    M.screen.getWorldPosition(_fc).project(camera);
+  // turn the rim by d radians; onSpin may return false at an end stop, then the rim does not move
+  function turn(d) { if (onSpin(-d) === false) return false; M.spinner.rotation.y += d; return true; }
+  // the angle of the cursor around the dial axis, measured in the dial's own plane: the cursor is cast onto the
+  // plane of the face, so a tilted, foreshortened dial still follows the finger exactly
+  const _inv = new THREE.Matrix4(), _o = new THREE.Vector3(), _dir = new THREE.Vector3(), _hit = new THREE.Vector3();
+  const facePlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), _ray = new THREE.Ray();
+  function faceAngle(e) {
     const r = cv.getBoundingClientRect();
-    return { x: r.left + (_fc.x + 1) / 2 * r.width, y: r.top + (1 - _fc.y) / 2 * r.height };
+    ndc.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ndc, camera);
+    M.group.updateMatrixWorld(true);
+    _inv.copy(M.group.matrixWorld).invert();
+    _ray.copy(ray.ray).applyMatrix4(_inv);
+    facePlane.constant = -M.screen.position.y;   // the face sits at the screen mesh height in the dial's frame
+    if (!_ray.intersectPlane(facePlane, _hit)) return null;
+    if (Math.hypot(_hit.x, _hit.z) < 0.05) return null;   // right on the axis the angle is undefined
+    return Math.atan2(-_hit.z, _hit.x);
   }
 
   // glow
@@ -227,7 +241,6 @@ export async function mountHero(cv, opts = {}) {
     [b.s, b.vs] = spring(b.s, b.vs, 1, t < 250 ? 0 : 60, 9, dt);
     [b.sq, b.vsq] = spring(b.sq, b.vsq, 1 + (reduced ? 0 : Math.sin(now / 1300) * 0.006), 420, 13, dt);
     // free spin with inertia, then back toward the viewer via the nearest full turn
-    if (M.spinner && !drag.on && Math.abs(knob.v) > 0.01) { turn(knob.v * dt); knob.v *= Math.pow(0.06, dt); }
     if (!drag.on) {
       spin.y += spin.vy * dt; spin.x += spin.vx * dt;
       spin.vy *= Math.pow(0.04, dt); spin.vx *= Math.pow(0.02, dt);
