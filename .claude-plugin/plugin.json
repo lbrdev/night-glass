@@ -1,6 +1,6 @@
 {
   "name": "night-glass",
-  "version": "1.7.4",
+  "version": "1.7.5",
   "description": "The Night Glass design system for Claude Code: a dark product showcase, liquid glass with parallax, a live 3D object in the hero, spring motion. Tokens, components, Tailwind/shadcn, a starter template and demos.",
   "author": {
     "name": "lbrdev",

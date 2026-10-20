@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.5 — 2026-10-20
+- Safari: the Orbi demo dials (Modes, the side view, the comparison) are round again. The screen canvas is now absolutely positioned inside the square, because Safari let an in-flow canvas stretch the `aspect-ratio` box taller than wide.
+
 ## 1.7.4 — 2026-10-20
 - Mobile: the glow around the dial in the comparison section no longer breaks into rectangular tiles. Large blurred box-shadows and `filter: blur()` are replaced with radial gradients, which mobile GPUs render smoothly.
 
