@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.4 — 2026-10-20
+- Mobile: the glow around the dial in the comparison section no longer breaks into rectangular tiles. Large blurred box-shadows and `filter: blur()` are replaced with radial gradients, which mobile GPUs render smoothly.
+
 ## 1.7.3 — 2026-10-20
 - Hero 3D canvas now lies under the whole hero (`canvas.hero-canvas` as a direct child of `.hero`), so the object can hop up behind the headline instead of being clipped by its row; the text stays on top. The camera still frames the object in the free `.hero-stage` row.
 

@@ -234,7 +234,7 @@ a.card:hover{border-color:#ffffff24;transform:translateY(-2px)}
 .vs .lose .art{width:min(100%,290px);margin:0 auto;filter:saturate(.55) brightness(.8)}
 .vs .lose h3{font-size:clamp(18px,1.8vw,21px);color:var(--dim)}
 .vs .lose ul{color:var(--mute)}
-.vs .win::before{content:"";position:absolute;left:8%;right:8%;top:4%;height:62%;z-index:-1;background:radial-gradient(closest-side,rgba(var(--acc-rgb),.32),rgba(var(--acc-rgb),0));filter:blur(12px)}
+.vs .win::before{content:"";position:absolute;left:0;right:0;top:-6%;height:76%;z-index:-1;pointer-events:none;background:radial-gradient(closest-side,rgba(var(--acc-rgb),.3),rgba(var(--acc-rgb),.12) 45%,rgba(var(--acc-rgb),0) 100%)}   /* no blur filter: mobile GPUs cut a blurred layer into visible tiles; the gradient is soft on its own */
 .vs .win .art{width:min(100%,470px);margin:0 auto}
 .vs .win h3{font-size:clamp(24px,2.8vw,32px)}
 .vs .win ul{color:var(--fg2);font-size:16.5px}
