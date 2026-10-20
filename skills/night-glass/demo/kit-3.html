@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en" class="no-js" data-accent="iris">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Night Glass: dialogs, sites, apps</title>
+<meta name="description" content="Night Glass test page 3: dialogs, menus, toasts, accessibility, website sections and app elements.">
+<meta name="theme-color" content="#050506">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/night-glass.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<style>
+/* test page layout; the elements on show are night-glass.css classes */
+.kit{max-width:var(--maxw);margin:0 auto;padding:calc(var(--nav) + 56px) var(--pad) 0}
+.kit-head{text-align:center;max-width:760px;margin:0 auto}
+.kit-head .lead{margin:20px auto 0}
+.blk{padding-top:clamp(80px,10vw,128px);scroll-margin-top:var(--nav)}
+.blk>header{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.blk>header h2{font-size:clamp(26px,3vw,36px);letter-spacing:-.03em}
+.blk>header p{color:var(--dim);font-size:14.5px;max-width:520px}
+.idx{font:500 13px var(--font-mono);color:var(--acc);margin-right:12px}
+.label{display:block;color:var(--dim);font-size:13px;margin:0 0 12px}
+.row2{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.stack{display:grid;gap:28px}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.stack>*,.cols2>*{min-width:0}
+@media(max-width:860px){.cols2{grid-template-columns:1fr}}
+code.k{font:13px var(--font-mono);color:var(--fg2);background:#ffffff0d;padding:2px 7px;border-radius:var(--r-2xs)}
+.drawer dl{display:grid;grid-template-columns:auto 1fr;gap:10px 20px;margin:20px 0 0;font-size:14.5px}
+.drawer dt{color:var(--dim)}
+.drawer dd{margin:0}
+.stage3d{position:relative;height:clamp(320px,36vw,440px);border-radius:var(--r-lg);border:1px solid var(--line);overflow:hidden;background:radial-gradient(60% 55% at 50% 58%,rgba(var(--glow),.2),transparent 70%),var(--card)}
+.stage3d canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y}
+.stage3d .cap{position:absolute;left:16px;top:14px;z-index:1}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="nav" aria-label="Sections">
+  <a class="wordmark" href="kit.html">night<i>glass</i></a>
+  <div class="nav-links">
+    <a href="#dialogs">Dialogs</a><a href="#menus">Menus</a><a href="#toasts">Toasts</a><a href="#a11y">Accessibility</a><a href="#swfaq">Swatches and FAQ</a><a href="#prose">Articles</a><a href="#quotes">Reviews</a><a href="#cta">Contact</a><a href="#auth">Sign in</a><a href="#gallery">Media</a><a href="#compareB">Compare</a><a href="#cmdkB">⌘K</a><a href="#dates">Dates</a><a href="#files">Files</a><a href="#tagsB">Tags</a><a href="#selB">Row selection</a><a href="#meterB">Meters</a><a href="#glb">3D .glb</a>
+  </div>
+  <div class="nav-end">
+    <a class="btn sm" href="kit-2.html">← Kit 11–21</a>
+    <button class="burger" aria-label="Menu" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path class="b1" d="M3 6h12"/><path class="b2" d="M3 12h12"/></svg></button>
+  </div>
+</nav>
+
+<main class="kit" id="main" tabindex="-1">
+  <div class="kit-head">
+    <p class="eyebrow">Test page, part 3</p>
+    <h1 class="display"><span>Dialogs, sites</span><span>and apps.</span></h1>
+    <p class="lead">Blocks 22 and up continue kit 01–21. <b>When leaving feedback, cite the block number.</b></p>
+  </div>
+
+  <!-- 22 dialogs -->
+  <section class="blk" id="dialogs">
+    <header><h2><span class="idx">22</span>Dialogs</h2><p>Sheet, side panel and confirmation on the native <code class="k">&lt;dialog&gt;</code>: focus stays inside, Esc and a click on the backdrop close it, and focus returns to the button.</p></header>
+    <div class="row2">
+      <button class="btn pri" data-open="dlgSheet">Sheet with a form</button>
+      <button class="btn" data-open="dlgDrawer">Side panel</button>
+      <button class="btn danger" id="askDelete">Delete scene…</button>
+    </div>
+    <p class="small dim" style="margin-top:14px" id="dlgResult">The result will appear here.</p>
+  </section>
+
+  <!-- 23 menus -->
+  <section class="blk" id="menus">
+    <header><h2><span class="idx">23</span>Menus</h2><p>A button with <code class="k">data-menu</code> opens a menu. The ↑/↓ arrows move between items, Esc returns focus to the button, and a click outside closes it.</p></header>
+    <div class="row2">
+      <div class="menu-host">
+        <button class="btn" data-menu aria-controls="m1" aria-haspopup="menu" aria-expanded="false">Actions <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3.5 5.5 7 9l3.5-3.5"/></svg></button>
+        <div class="menu start" id="m1" role="menu" hidden>
+          <div class="lbl" role="presentation">Scene</div>
+          <button role="menuitem" data-act="Rename"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>Rename<kbd>F2</kbd></button>
+          <button role="menuitem" data-act="Duplicate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>Duplicate<kbd>Ctrl D</kbd></button>
+          <button role="menuitem" data-act="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v12M7 8l5-5 5 5M5 14v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5"/></svg>Share</button>
+          <div class="sep" role="separator"></div>
+          <button role="menuitem" class="danger" data-act="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Delete</button>
+        </div>
+      </div>
+      <div class="menu-host">
+        <button class="btn icon-only" data-menu aria-controls="m2" aria-haspopup="menu" aria-expanded="false" aria-label="More"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button>
+        <div class="menu start" id="m2" role="menu" hidden>
+          <a role="menuitem" href="#menus">Settings</a><a role="menuitem" href="#menus">Help</a><div class="sep" role="separator"></div><a role="menuitem" href="#menus">Sign out</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 24 toasts -->
+  <section class="blk" id="toasts">
+    <header><h2><span class="idx">24</span>Toasts</h2><p>A stack of up to three, four kinds with an icon, and an action button (“Undo”). While the cursor is over a toast, it stays put.</p></header>
+    <div class="row2">
+      <button class="btn" data-toast="info">Default</button>
+      <button class="btn" data-toast="good">Done</button>
+      <button class="btn" data-toast="warn">Warning</button>
+      <button class="btn" data-toast="bad">Error</button>
+      <button class="btn pri" id="toastUndo">With “Undo”</button>
+      <button class="btn" id="toastMany">Four in a row</button>
+    </div>
+  </section>
+
+  <!-- 25 accessibility -->
+  <section class="blk" id="a11y">
+    <header><h2><span class="idx">25</span>Accessibility</h2><p>What you don't see until you need it.</p></header>
+    <div class="cols2">
+      <div class="card stack" style="gap:12px"><h3>“Skip to content” link</h3><p class="dim small">Reload the page and press Tab: the <code class="k">.skip</code> link appears first and jumps past the header.</p><button class="btn sm" id="skipDemo" style="justify-self:start">Show</button></div>
+      <div class="card stack" style="gap:12px"><h3>Windows high contrast</h3><p class="dim small">In <code class="k">forced-colors</code> mode the glass and shadows disappear, so buttons, panels and cards get system borders and the selected item is highlighted in a system color.</p></div>
+      <div class="card stack" style="gap:12px"><h3>Print</h3><p class="dim small">When printed, the page turns white with black text, the header, tab bar and 3D are hidden, and external links show their address.</p><button class="btn sm" onclick="print()" style="justify-self:start">Print preview</button></div>
+      <div class="card stack" style="gap:12px"><h3>Reduced motion</h3><p class="dim small">The system “reduce motion” setting turns off block reveals, springs, 3D floating and cascades. State changes stay.</p></div>
+    </div>
+  </section>
+
+  <!-- 26 swatches and FAQ -->
+  <section class="blk" id="swfaq">
+    <header><h2><span class="idx">26</span>Swatches and smooth FAQ</h2><p>The <code class="k">.swatches</code> are now in the core. FAQ answers expand smoothly in height (Chrome 131+; other browsers behave as before).</p></header>
+    <div class="cols2">
+      <div><span class="label" id="swl">Ring color</span>
+        <div class="swatches" role="group" aria-labelledby="swl">
+          <button style="--c:#ff9f5a" aria-label="Amber" aria-pressed="true"></button><button style="--c:#a98bff" aria-label="Iris" aria-pressed="false"></button>
+          <button style="--c:#6cc4ff" aria-label="Sky" aria-pressed="false"></button><button style="--c:#5fe3b4" aria-label="Mint" aria-pressed="false"></button>
+          <button style="--c:#ff7aa8" aria-label="Rose" aria-pressed="false"></button><button style="--c:#c6f36b" aria-label="Lime" aria-pressed="false"></button>
+        </div>
+      </div>
+      <div class="faq" style="margin:0">
+        <details><summary>How does it expand?</summary><p>The height animates from zero to the content size through interpolate-size, with no scripts and no measuring.</p></details>
+        <details><summary>What if the browser is old?</summary><p>The answer simply appears at once, as before, with a 4px shift.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 27 articles -->
+  <section class="blk" id="prose">
+    <header><h2><span class="idx">27</span>Articles</h2><p>Blog, guides and docs: <code class="k">.art</code>, <code class="k">.art-head</code>, <code class="k">.toc</code>, <code class="k">.prose</code>, <code class="k">.callout</code>. Text width 760px, line height 1.72.</p></header>
+    <article class="art">
+      <nav class="crumbs" aria-label="Breadcrumbs"><a href="#prose">Journal</a><i>/</i><a href="#prose">Guides</a><i>/</i><span aria-current="page">How to set up scenes</span></nav>
+      <div class="art-head" style="margin-top:24px">
+        <p class="eyebrow">Guide</p>
+        <h1>Set up scenes in five minutes</h1>
+        <p class="lead">A scene remembers light, music and climate. Here is how to build your first one without getting lost in the rooms.</p>
+        <div class="art-meta"><span class="ava sm">LW</span><span>Leo White</span><i>·</i><time>Oct 19, 2026</time><i>·</i><span>6 min read</span></div>
+      </div>
+      <nav class="toc" aria-label="Contents"><h2>Contents</h2><ol><li><a href="#s1">What a scene is</a></li><li><a href="#s2">Your first scene</a></li><li><a href="#s3">Schedule</a></li></ol></nav>
+      <div class="prose">
+        <h2 id="s1">What a scene is</h2>
+        <p>A scene is a <strong>snapshot of your home</strong>: which lamps are on, what is playing and what the temperature is. You can start it with a touch of the dial or on a schedule. Details are in the <a href="#prose">help center</a>.</p>
+        <ul><li>light: the brightness and color of each lamp;</li><li>music: the speaker and its volume;</li><li>climate: the target temperature.</li></ul>
+        <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><div><b>Tip.</b> Start with a single room: it is easier to see what got remembered.</div></div>
+        <h2 id="s2">Your first scene</h2>
+        <ol><li>Set the light and music by hand.</li><li>Hold the dial for two seconds.</li><li>Choose <code>Save as scene</code> and give it a name.</li></ol>
+        <blockquote>The best scenes are born in the evening: set the house up your way and simply save what you end up with.</blockquote>
+        <h3 id="s3">Schedule</h3>
+        <p>Scenes can start at a set time. For example, this is how a rule looks in the settings file:</p>
+<pre><code>scene: "Evening"
+at: "21:30"
+days: [mon, tue, wed, thu, fri]</code></pre>
+        <hr>
+        <p>If a scene doesn't start the way you planned, check the “Questions” section at the bottom of the page.</p>
+      </div>
+    </article>
+  </section>
+
+  <!-- 28 testimonials -->
+  <section class="blk" id="quotes">
+    <header><h2><span class="idx">28</span>Testimonials and quote</h2><p><code class="k">.quote</code> cards in a grid and one large <code class="k">.pull</code> for the lead testimonial.</p></header>
+    <figure class="pull"><blockquote>I stopped hunting for my phone just to dim the lights. The dial sits right where I need it.</blockquote><figcaption><span class="ava">MC</span><span><b>Mary Collins</b> · Kyiv</span></figcaption></figure>
+    <div class="quotes" style="margin-top:48px">
+      <figure class="quote"><blockquote>We put a dial in every room. The kids figured it out in a minute.</blockquote><figcaption><span class="ava sm" style="--acc-rgb:255,159,90">AM</span><div><b>Andrew Miller</b><span>Lviv</span></div></figcaption></figure>
+      <figure class="quote"><blockquote>I now change the music in the kitchen without leaving the stove. A small thing, but a nice one.</blockquote><figcaption><span class="ava sm" style="--acc-rgb:95,227,180">IB</span><div><b>Irene Baker</b><span>Odesa</span></div></figcaption></figure>
+      <figure class="quote"><blockquote>Connected it to Home Assistant with no apps. Everything was found on its own.</blockquote><figcaption><span class="ava sm" style="--acc-rgb:108,196,255">SR</span><div><b>Sam Reed</b><span>Dnipro</span></div></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 29 logos and numbers -->
+  <section class="blk" id="logos">
+    <header><h2><span class="idx">29</span>Logos and numbers</h2><p>The partner logo row is muted and brightens on hover; <code class="k">.numbers</code> is a band of large figures. The names are made up.</p></header>
+    <p class="logos-head">Works with devices</p>
+    <div class="logos"><span>Ventra</span><span>kolo</span><span>MIRRA</span><span>Ostro</span><span>plyta</span><span>Zenko</span></div>
+    <div class="numbers" style="margin-top:64px"><div><b>48,000</b><span>dials in homes</span></div><div><b>4.9</b><span>average rating</span></div><div><b>6 mo</b><span>between charges</span></div><div><b>30 days</b><span>to return</span></div></div>
+  </section>
+
+  <!-- 30 call to action, subscribe, contact -->
+  <section class="blk" id="cta">
+    <header><h2><span class="idx">30</span>Call to action, subscribe, contact</h2><p>The <code class="k">.cta-band</code> strip before the footer, a one-line <code class="k">.subscribe</code> form, and a contact form with hints and errors under the fields.</p></header>
+    <div class="cta-band"><div><h2>Try it at home for 30 days.</h2><p>Not for you? We refund you and pick the dial up ourselves.</p></div><div class="ctas"><a class="btn lg pri" href="#cta">Order</a><a class="btn lg" href="#cta">Compare models</a></div></div>
+    <div style="margin-top:48px"><span class="label" id="subL">News once a month, no spam</span>
+      <form class="subscribe" id="subForm" aria-labelledby="subL" novalidate><input type="email" placeholder="you@example.com" aria-label="Email" required><button class="btn pri">Subscribe</button></form></div>
+    <div class="contact" style="margin-top:64px">
+      <div><h2 class="title" style="font-size:clamp(28px,3.4vw,40px)">Write to us</h2><p class="dim" style="margin-top:12px">We reply within a couple of hours on business days.</p>
+        <dl><div><dt>Email</dt><dd><a href="mailto:hello@example.com">hello@example.com</a></dd></div><div><dt>Phone</dt><dd><a href="tel:+380000000000">+380 00 000 00 00</a></dd></div><div><dt>Office</dt><dd>1 Fictional St, Kyiv</dd></div></dl></div>
+      <form class="card" id="contactForm" novalidate>
+        <div class="form-row"><label class="field"><span>Name</span><input class="input" name="name" autocomplete="name"></label><label class="field"><span>Email</span><input class="input" name="email" type="email" autocomplete="email"><span class="error" id="mailErr"></span></label></div>
+        <label class="field"><span>Subject</span><select class="input" name="topic"><option>Question about buying</option><option>Help with installation</option><option>Partnership</option></select></label>
+        <label class="field"><span>Message</span><textarea class="input" name="msg" rows="4"></textarea><span class="hint">Tell us which devices you have at home.</span></label>
+        <div class="row2" style="margin-top:20px"><button class="btn pri">Send</button><span class="small dim">Send an empty form to see the error</span></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- 31 sign in -->
+  <section class="blk" id="auth">
+    <header><h2><span class="idx">31</span>Sign in with an email code</h2><p>No passwords: an email, then a six-digit code. The cells advance on their own, accept a pasted code and shake on an error. The correct code in the demo is <code class="k">482913</code>.</p></header>
+    <div class="auth card" style="padding:clamp(28px,4vw,44px)">
+      <div id="authStep1"><h1>Sign in to Orbi</h1><p class="lead">We'll email you a code. No passwords.</p>
+        <form id="authMail" novalidate><label class="field"><span>Email</span><input class="input" type="email" id="authEmail" placeholder="you@example.com" autocomplete="email"></label><button class="btn pri wide" style="margin-top:18px">Get a code</button></form></div>
+      <div id="authStep2" hidden><h1>Check your email</h1><p class="lead">We sent a code to <b id="authTo">your email</b>.</p>
+        <div class="otp" data-otp id="otp"><input><input><input><span class="gap"></span><input><input><input></div>
+        <p class="alt"><button class="link" type="button" id="authBack">Use a different email</button></p></div>
+    </div>
+  </section>
+
+  <!-- 32 404 -->
+  <section class="blk" id="nf">
+    <header><h2><span class="idx">32</span>404 page</h2><p>A large outlined number, one line and a way back. On a real site it fills the whole screen.</p></header>
+    <div class="card" style="padding:0;overflow:hidden"><div class="notfound" style="min-height:420px"><div><div class="nf-num" aria-hidden="true">404</div><h1>This page doesn't exist</h1><p>It may have been renamed. Start from the home page or search for what you need.</p><div class="ctas"><a class="btn pri" href="#top">Home</a><a class="btn" href="#prose">Journal</a></div></div></div></div>
+  </section>
+
+  <!-- 33 cookie consent -->
+  <section class="blk" id="consentB">
+    <header><h2><span class="idx">33</span>Cookie consent</h2><p>A card in the corner of the screen, not a full-screen wall; two choices of equal weight. The choice is remembered.</p></header>
+    <div class="row2"><button class="btn" id="consentReset">Show the banner again</button><span class="small dim" id="consentState"></span></div>
+  </section>
+
+  <!-- 34 video -->
+  <section class="blk" id="video">
+    <header><h2><span class="idx">34</span>Video with a poster</h2><p>The player (a file or cookie-free YouTube) loads only after a click, so the page doesn't pull in third-party scripts up front.</p></header>
+    <button class="video" aria-label="Watch the video: how to install Orbi" id="vid"><span class="play glass"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg></span><span class="cap">How to install Orbi · 2:14</span></button>
+  </section>
+
+  <!-- 35 gallery -->
+  <section class="blk" id="gallery">
+    <header><h2><span class="idx">35</span>Fullscreen gallery</h2><p>Thumbnails lift on hover; the viewer pages with arrows, the ←/→ keys and swipes, and Esc closes it.</p></header>
+    <div class="gallery" id="gal"></div>
+  </section>
+
+  <!-- 36 carousel -->
+  <section class="blk" id="carousel">
+    <header><h2><span class="idx">36</span>Carousel with dots</h2><p>A rail that snaps to slides; the current dot stretches into a capsule, and pressing a dot pages to it.</p></header>
+    <div class="carousel"><div class="rail" id="car"></div><div class="dots" aria-label="Slides"></div></div>
+  </section>
+
+  <!-- 37 comparison -->
+  <section class="blk" id="compareB">
+    <header><h2><span class="idx">37</span>Plan comparison</h2><p>A table under the price cards: the “pick” column is tinted with the accent, checks use the accent, and dashes are gray.</p></header>
+    <div class="tbl-wrap"><table class="compare">
+      <thead><tr><th></th><th>Orbi<small>$79</small></th><th class="pro">Orbi Pro<small>$129</small></th></tr></thead>
+      <tbody>
+        <tr class="grp"><td colspan="3">Control</td></tr>
+        <tr><td>Light, music, climate</td><td class="yes">✓</td><td class="pro yes">✓</td></tr>
+        <tr><td>Custom modes</td><td class="no">—</td><td class="pro yes">✓</td></tr>
+        <tr><td>Gestures</td><td class="no">—</td><td class="pro yes">✓</td></tr>
+        <tr class="grp"><td colspan="3">In the box</td></tr>
+        <tr><td>Stand</td><td class="yes">✓</td><td class="pro yes">✓</td></tr>
+        <tr><td>Wall mount</td><td class="no">—</td><td class="pro yes">✓</td></tr>
+      </tbody></table></div>
+  </section>
+
+  <!-- 38 command palette -->
+  <section class="blk" id="cmdkB">
+    <header><h2><span class="idx">38</span>Command palette</h2><p>Press <kbd>Ctrl</kbd> <kbd>K</kbd> (or <kbd>⌘</kbd> <kbd>K</kbd>) anywhere on the page. Search matches letters anywhere in the name, group, hint or key.</p></header>
+    <button class="btn" id="cmdkOpen">Open the palette <kbd>Ctrl K</kbd></button>
+  </section>
+
+  <!-- 39 date range -->
+  <section class="blk" id="dates">
+    <header><h2><span class="idx">39</span>Date range</h2><p>Preset periods as rows (nobody wants to page through a calendar for “the last 30 days”), with a custom range at the bottom. The event is <code class="k">rangechange</code>.</p></header>
+    <div class="row2">
+      <div class="menu-host daterange" id="dr">
+        <button class="btn" data-menu aria-controls="drm" aria-haspopup="menu" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Last 30 days</span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3.5 5.5 7 9l3.5-3.5"/></svg></button>
+        <div class="menu start" id="drm" role="menu" hidden>
+          <button role="menuitemradio" aria-checked="false" data-days="0">Today</button>
+          <button role="menuitemradio" aria-checked="false" data-days="7">Last 7 days</button>
+          <button role="menuitemradio" aria-checked="true" data-days="30">Last 30 days</button>
+          <button role="menuitemradio" aria-checked="false" data-days="90">Last 90 days</button>
+          <button role="menuitemradio" aria-checked="false" data-range="month">This month</button>
+          <div class="custom"><label>From<input class="input" type="date" value="2026-09-01"></label><label>To<input class="input" type="date" value="2026-10-19"></label><button class="btn sm" type="button">Apply custom range</button></div>
+        </div>
+      </div>
+      <span class="small dim" id="drOut">2026-09-19 — 2026-10-19</span>
+    </div>
+  </section>
+
+  <!-- 40 files -->
+  <section class="blk" id="files">
+    <header><h2><span class="idx">40</span>File upload</h2><p>Drag files in or click. The border lights up while dragging, and each file gets its own progress bar (the upload in the demo is simulated).</p></header>
+    <label class="dropzone" data-list="fileList"><input type="file" multiple aria-label="Choose files">
+      <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg></span>
+      <b>Drop files here</b><p>or click to choose · up to 20 MB</p></label>
+    <ul class="files" id="fileList"></ul>
+  </section>
+
+  <!-- 41 tags -->
+  <section class="blk" id="tagsB">
+    <header><h2><span class="idx">41</span>Tags and multi-select</h2><p>Enter or a comma adds a tag, Backspace in an empty field removes the last one, and the suggestions below add with one tap.</p></header>
+    <div class="field" style="max-width:560px;margin:0"><span id="tagsL">Scene rooms</span>
+      <div class="tags" data-tags data-sug="tagSug" data-value="Living room,Kitchen" aria-labelledby="tagsL"><input placeholder="Add a room" aria-labelledby="tagsL"></div>
+      <div class="tags-sug" id="tagSug"><button type="button">Bedroom</button><button type="button">Study</button><button type="button">Kids' room</button><button type="button">Terrace</button></div></div>
+  </section>
+
+  <!-- 42 numbers and text -->
+  <section class="blk" id="numB">
+    <header><h2><span class="idx">42</span>Number field and auto-growing text</h2><p>“−” and “+” accelerate while held, the ↑/↓ arrows step (with Shift, by 10), and min/max bounds apply. The message field grows with its text, and the character counter turns red at the limit.</p></header>
+    <div class="cols2">
+      <div class="stack" style="gap:18px">
+        <label class="field" style="margin:0"><span>Temperature</span><div class="num-input"><button type="button" data-step="-1" aria-label="Decrease">−</button><input value="21.5" min="16" max="28" step="0.5" inputmode="decimal" aria-label="Temperature"><span class="unit">°C</span><button type="button" data-step="1" aria-label="Increase">+</button></div></label>
+        <label class="field" style="margin:0"><span>Number of dials</span><div class="num-input"><button type="button" data-step="-1" aria-label="Decrease">−</button><input value="1" min="1" max="10" step="1" inputmode="numeric" aria-label="Quantity"><button type="button" data-step="1" aria-label="Increase">+</button></div></label>
+      </div>
+      <label class="field" style="margin:0"><span>Order comment <span class="count-chars">0 / 200</span></span><textarea class="input auto" maxlength="200" placeholder="Start typing and the field grows with your text"></textarea></label>
+    </div>
+  </section>
+
+  <!-- 43 table with selection -->
+  <section class="blk" id="selB">
+    <header><h2><span class="idx">43</span>Table: row selection and states</h2><p>The header checkbox selects all (and shows “partial”), and a glass action bar rises from the bottom. Below are the “loading” and “empty” states.</p></header>
+    <div class="tbl-wrap"><table class="tbl" data-select id="devTbl">
+      <thead><tr><th class="sel"><label class="check"><input type="checkbox" aria-label="Select all"></label></th><th>Device</th><th>Room</th><th>Status</th><th class="num">Battery</th></tr></thead>
+      <tbody>
+        <tr><td class="sel"><label class="check"><input type="checkbox" aria-label="Select Orbi 1"></label></td><td>Orbi 1</td><td>Living room</td><td><span class="pill good">Online</span></td><td class="num">72%</td></tr>
+        <tr><td class="sel"><label class="check"><input type="checkbox" aria-label="Select Orbi 2"></label></td><td>Orbi 2</td><td>Bedroom</td><td><span class="pill good">Online</span></td><td class="num">54%</td></tr>
+        <tr><td class="sel"><label class="check"><input type="checkbox" aria-label="Select Orbi Pro"></label></td><td>Orbi Pro</td><td>Kitchen</td><td><span class="pill">Asleep</span></td><td class="num">18%</td></tr>
+        <tr><td class="sel"><label class="check"><input type="checkbox" aria-label="Select Orbi 4"></label></td><td>Orbi 4</td><td>Study</td><td><span class="pill acc">Updating</span></td><td class="num">91%</td></tr>
+      </tbody></table></div>
+    <div class="cols2" style="margin-top:20px">
+      <div class="tbl-wrap"><table class="tbl" aria-busy="true"><thead><tr><th>Device</th><th class="num">Battery</th></tr></thead><tbody>
+        <tr class="sk-row"><td><div class="sk" style="width:60%"></div></td><td><div class="sk" style="width:40%;margin-left:auto"></div></td></tr>
+        <tr class="sk-row"><td><div class="sk" style="width:45%"></div></td><td><div class="sk" style="width:30%;margin-left:auto"></div></td></tr>
+        <tr class="sk-row"><td><div class="sk" style="width:70%"></div></td><td><div class="sk" style="width:35%;margin-left:auto"></div></td></tr></tbody></table></div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Device</th><th class="num">Battery</th></tr></thead><tbody><tr><td colspan="2"><div class="tbl-state"><b>Nothing found</b>Try another room or reset the filters.</div></td></tr></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- 44 meters -->
+  <section class="blk" id="meterB">
+    <header><h2><span class="idx">44</span>Meters</h2><p>Fill by level: normal, warning, danger; the track is a lighter step of the same color, and the mark is the threshold.</p></header>
+    <div class="cols2">
+      <div class="meter" data-level="ok" style="--v:42%;--t:80%"><div class="top"><span>Hub storage</span><b>4.2 of 10 GB</b></div><div class="bar" role="meter" aria-valuenow="42" aria-valuemin="0" aria-valuemax="100" aria-label="Storage"><i></i><s title="Threshold 80%"></s></div><div class="sub"><span>Normal</span><span>threshold 80%</span></div></div>
+      <div class="meter" data-level="warn" style="--v:78%;--t:80%"><div class="top"><span>Zigbee load</span><b>78%</b></div><div class="bar" role="meter" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" aria-label="Load"><i></i><s></s></div><div class="sub"><span>Near the threshold</span><span>threshold 80%</span></div></div>
+      <div class="meter" data-level="bad" style="--v:94%;--t:80%"><div class="top"><span>Device memory</span><b>94%</b></div><div class="bar" role="meter" aria-valuenow="94" aria-valuemin="0" aria-valuemax="100" aria-label="Memory"><i></i><s></s></div><div class="sub"><span>Above the threshold</span><span>threshold 80%</span></div></div>
+      <div class="meter" style="--v:63%"><div class="top"><span>Setup progress</span><b>5 of 8 steps</b></div><div class="bar" role="meter" aria-valuenow="63" aria-valuemin="0" aria-valuemax="100" aria-label="Setup"><i></i></div></div>
+    </div>
+  </section>
+
+  <!-- 45 your own 3D model -->
+  <section class="blk" id="glb">
+    <header><h2><span class="idx">45</span>Your own 3D model (.glb)</h2><p><code class="k">mountHero(canvas, { model: { url: 'model.glb', screen: 'Screen' } })</code>: the model centers and scales itself, and a live image is laid on the mesh with the screen name. Drop your own <code class="k">.glb</code> here.</p></header>
+    <div class="cols2">
+      <div class="stage3d" id="glbStage"><span class="tag-glass cap" id="glbName">example: built and exported to .glb in the browser</span><canvas id="glbCv" aria-label="3D model from a .glb file"></canvas></div>
+      <div class="stack" style="gap:16px">
+        <label class="dropzone" id="glbDrop"><input type="file" accept=".glb,.gltf,model/gltf-binary" aria-label="Choose a .glb model">
+          <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8"/></svg></span>
+          <b>Drop a .glb</b><p>or click to choose a model file</p></label>
+        <label class="field" style="margin:0"><span>Screen mesh name (optional)</span><input class="input" id="glbScreen" placeholder="For example, Screen"><span class="hint">A live clock image will be laid on this mesh. Without a name, the model is shown as is.</span></label>
+        <p class="small dim">The model never leaves your device: the file is read right in the browser.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-links"><a href="kit.html">Kit 01–10</a><a href="kit-2.html">Kit 11–21</a><a href="index.html">Orbi demo</a></div>
+  <p>Night Glass, test page 3.</p>
+</footer>
+
+<div class="consent" data-consent="kit" id="consent" hidden role="region" aria-label="Cookie consent">
+  <h2>We use cookies</h2>
+  <p>Essential ones keep the site working; analytics only with your consent.</p>
+  <div class="actions"><button class="btn sm" data-consent-choice="necessary">Essential only</button><button class="btn sm pri" data-consent-choice="all">Allow all</button></div>
+</div>
+
+<div class="bulkbar" data-bulk-for="devTbl" hidden role="region" aria-label="Actions for selected items">Selected <b data-count>0</b><span class="sepv"></span><button class="btn sm" id="bulkUpd">Update</button><button class="btn sm danger" id="bulkDel">Delete</button></div>
+
+<dialog class="sheet" id="dlgSheet" aria-labelledby="dlgSheetT">
+  <button class="btn icon-only sm x" data-close aria-label="Close">✕</button>
+  <h2 id="dlgSheetT">New scene</h2>
+  <p>A scene remembers light, music and temperature.</p>
+  <label class="field"><span>Name</span><input class="input" id="sceneName" placeholder="For example, Evening" autofocus></label>
+  <label class="field"><span>Room</span><select class="input"><option>Living room</option><option>Bedroom</option><option>Kitchen</option></select></label>
+  <div class="actions"><button class="ghost" data-close>Cancel</button><button class="btn pri" data-close="save">Create</button></div>
+</dialog>
+
+<dialog class="drawer" id="dlgDrawer" aria-labelledby="dlgDrawerT">
+  <button class="btn icon-only sm x" data-close aria-label="Close">✕</button>
+  <h2 id="dlgDrawerT">Orbi in the living room</h2>
+  <p>Device details in a side panel: the list stays visible beneath it.</p>
+  <dl><dt>Status</dt><dd><span class="pill good">Online</span></dd><dt>Firmware</dt><dd>2.4</dd><dt>Battery</dt><dd>72%</dd><dt>Hub</dt><dd>Home Assistant</dd></dl>
+  <div class="actions"><button class="btn" data-close>Close</button><button class="btn pri" data-close="update">Update firmware</button></div>
+</dialog>
+
+<script type="module">
+import { toast, confirmDialog, otpError, initCarousels, commandPalette } from '../assets/night-glass.js';
+const $ = id => document.getElementById(id);
+const out = t => $('dlgResult').textContent = t;
+$('dlgSheet').addEventListener('close', e => out(e.target.returnValue === 'save' ? `Scene “${$('sceneName').value || 'Untitled'}” created` : 'Sheet closed without saving'));
+$('dlgDrawer').addEventListener('close', e => e.target.returnValue === 'update' && toast('Update started', { type: 'good' }));
+$('askDelete').onclick = async () => {
+  const ok = await confirmDialog({ title: 'Delete the “Evening” scene?', text: 'Your dials will stop showing it. This can\'t be undone.', ok: 'Delete', danger: true });
+  out(ok ? 'Scene deleted' : 'Deletion cancelled');
+};
+document.querySelectorAll('[data-act]').forEach(b => b.addEventListener('click', () => toast(b.dataset.act)));
+const TXT = { info: 'Scene saved to drafts', good: 'Device connected', warn: 'Battery at 18%, enough for two weeks', bad: 'The hub isn\'t responding' };
+document.querySelectorAll('[data-toast]').forEach(b => b.addEventListener('click', () => toast(TXT[b.dataset.toast], { type: b.dataset.toast })));
+$('toastUndo').onclick = () => toast('Scene deleted', { action: { label: 'Undo', onClick: () => toast('Scene restored', { type: 'good' }) } });
+$('toastMany').onclick = () => ['First', 'Second', 'Third', 'The fourth pushes out the first'].forEach((t, i) => setTimeout(() => toast(t), i * 180));
+$('skipDemo').onclick = () => { const s = document.querySelector('.skip'); s.focus(); };
+
+// ---------------------------------------------------------------- batch 2: websites
+$('subForm').addEventListener('submit', e => { e.preventDefault(); const v = e.target.querySelector('input').value; toast(/.+@.+\..+/.test(v) ? 'Subscribed' : 'Check the email address', { type: /.+@.+\..+/.test(v) ? 'good' : 'bad' }); });
+$('contactForm').addEventListener('submit', e => {
+  e.preventDefault(); const f = e.target, ok = /.+@.+\..+/.test(f.email.value);
+  $('mailErr').textContent = ok ? '' : 'We need your email to reply'; f.email.classList.toggle('err', !ok); f.email.setAttribute('aria-invalid', !ok);
+  if (ok) toast('Message sent', { type: 'good' }); else f.email.focus();
+});
+$('authMail').addEventListener('submit', e => {
+  e.preventDefault(); const v = $('authEmail').value;
+  if (!/.+@.+\..+/.test(v)) { $('authEmail').classList.add('err'); $('authEmail').focus(); return; }
+  $('authEmail').classList.remove('err'); $('authTo').textContent = v; $('authStep1').hidden = true; $('authStep2').hidden = false; $('otp').querySelector('input').focus();
+});
+$('authBack').onclick = () => { $('authStep2').hidden = true; $('authStep1').hidden = false; $('authEmail').focus(); };
+$('otp').addEventListener('otpcomplete', e => e.detail.code === '482913' ? toast('Signed in', { type: 'good' }) : (otpError($('otp')), toast('Wrong code', { type: 'bad' })));
+const cs = () => { let v = null; try { v = localStorage.getItem('ng-consent:kit'); } catch {} $('consentState').textContent = v ? `Saved choice: ${v === 'all' ? 'allow all' : 'essential only'}` : 'No choice made'; };
+$('consent').addEventListener('consent', cs); cs();
+$('consentReset').onclick = () => { try { localStorage.removeItem('ng-consent:kit'); } catch {} $('consent').hidden = false; cs(); };
+$('vid').addEventListener('click', () => { if (!$('vid').dataset.src) toast('The video starts here: set data-src or data-yt'); });
+// images for the gallery and carousel: abstract (made-up) gradients
+const HUES = [[255,159,90],[169,139,255],[108,196,255],[95,227,180],[255,122,168],[198,243,107]];
+const art = (c, i, w = 800, h = 600) => 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><radialGradient id="g" cx="${30 + i * 9}%" cy="35%" r="80%"><stop offset="0" stop-color="rgb(${c})"/><stop offset=".55" stop-color="rgb(${c.map(v => v * .35 | 0)})"/><stop offset="1" stop-color="#050506"/></radialGradient></defs><rect width="${w}" height="${h}" fill="url(#g)"/><circle cx="${w * .62}" cy="${h * .55}" r="${h * .22}" fill="#000" opacity=".55"/><circle cx="${w * .62}" cy="${h * .55}" r="${h * .22}" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="3"/></svg>`);
+const NAMES = ['Living room', 'Bedroom', 'Kitchen', 'Study', 'Kids\' room', 'Terrace'];
+$('gal').replaceChildren(...HUES.map((c, i) => { const b = document.createElement('button'); b.dataset.caption = `${NAMES[i]}: Orbi dial`; b.dataset.full = art(c, i, 1600, 1200); const im = document.createElement('img'); im.src = art(c, i, 400, 400); im.alt = NAMES[i]; b.append(im); b.setAttribute('aria-label', `Open photo: ${NAMES[i]}`); return b; }));
+$('car').replaceChildren(...HUES.map((c, i) => { const d = document.createElement('figure'); d.className = 'slide'; d.style.margin = '0'; const im = document.createElement('img'); im.src = art(c, i, 840, 520); im.alt = NAMES[i]; im.style.cssText = 'display:block;width:100%;aspect-ratio:840/520;object-fit:cover'; const cap = document.createElement('figcaption'); cap.style.cssText = 'padding:14px 18px;font-size:14.5px'; cap.textContent = `${NAMES[i]}: “Evening” scene`; d.append(im, cap); return d; }));
+initCarousels();   // slides are added by script, so the dots are wired up afterwards
+
+// ---------------------------------------------------------------- batch 3: apps
+const go = id => () => document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+const I = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const pal = commandPalette({ items: [
+  { group: 'Go to', label: 'Dialogs', hint: 'block 22', icon: I('<rect x="3" y="5" width="18" height="14" rx="3"/>'), run: go('dialogs') },
+  { group: 'Go to', label: 'Articles', hint: 'block 27', icon: I('<path d="M5 4h10l4 4v12H5z"/>'), run: go('prose') },
+  { group: 'Go to', label: 'Sign in with a code', hint: 'block 31', icon: I('<rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>'), run: go('auth') },
+  { group: 'Go to', label: 'Table with selection', hint: 'block 43', icon: I('<path d="M3 6h18M3 12h18M3 18h18"/>'), run: go('selB') },
+  { group: 'Actions', label: 'Create scene', kbd: 'N', icon: I('<path d="M12 5v14M5 12h14"/>'), run: () => document.querySelector('[data-open="dlgSheet"]').click() },
+  { group: 'Actions', label: 'Delete scene', icon: I('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>'), run: () => document.getElementById('askDelete').click() },
+  { group: 'Actions', label: 'Show toast', icon: I('<circle cx="12" cy="12" r="9"/>'), run: () => toast('Command executed', { type: 'good' }) },
+  { group: 'View', label: 'Accent: amber', run: () => document.documentElement.dataset.accent = 'ember' },
+  { group: 'View', label: 'Accent: iris', run: () => document.documentElement.dataset.accent = 'iris' },
+  { group: 'View', label: 'Accent: mint', run: () => document.documentElement.dataset.accent = 'mint' },
+] });
+$('cmdkOpen').onclick = () => pal.open();
+$('dr').addEventListener('rangechange', e => $('drOut').textContent = `${e.detail.from} — ${e.detail.to}`);
+document.querySelector('#files .dropzone').addEventListener('files', e => e.detail.items.forEach(it => {
+  let p = 0; const t = setInterval(() => { p = Math.min(100, p + 8 + Math.random() * 18); it.progress(p); if (p >= 100) { clearInterval(t); it.done(); } }, 200);
+}));
+$('bulkUpd').onclick = () => toast(`Updating ${document.querySelector('[data-count]').textContent} devices`, { type: 'good' });
+$('bulkDel').onclick = async () => { if (await confirmDialog({ title: 'Delete the selected devices?', text: 'You\'ll have to connect them again.', ok: 'Delete', danger: true })) toast('Devices deleted', { action: { label: 'Undo', onClick: () => toast('Restored') } }); };
+
+// ---------------------------------------------------------------- batch 4: your own 3D model
+(async () => {
+  const stage = $('glbStage'), cvHolder = stage;
+  let hero = null;
+  // screen: a clock on a canvas
+  const scr = Object.assign(document.createElement('canvas'), { width: 512, height: 512 });
+  const drawScr = () => { const g = scr.getContext('2d'), col = getComputedStyle(document.documentElement).getPropertyValue('--acc-rgb'); const gr = g.createRadialGradient(256, 200, 20, 256, 256, 380); gr.addColorStop(0, `rgba(${col},.75)`); gr.addColorStop(1, '#050506'); g.fillStyle = gr; g.fillRect(0, 0, 512, 512); g.fillStyle = '#f5f5f7'; g.textAlign = 'center'; g.font = '700 130px "Inter Tight", Inter, sans-serif'; g.fillText(new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }), 256, 300); };
+  await document.fonts.ready; drawScr();
+  async function show(url, screenName, label) {
+    hero?.dispose();
+    const old = $('glbCv'), cv = old.cloneNode(); old.replaceWith(cv);   // new canvas, new WebGL context
+    try {
+      const { mountHero } = await import('../assets/night-glass-3d.js');
+      hero = await mountHero(cv, { model: { url, screen: screenName || undefined, tilt: .15 }, screen: screenName ? scr : null, anchor: stage });
+      $('glbName').textContent = label;
+    } catch (e) { $('glbName').textContent = 'Could not load the model'; toast('Could not open the model: ' + e.message, { type: 'bad' }); }
+  }
+  // example: a capsule speaker with a round screen, built in three.js and exported to .glb, then loaded as a file
+  try {
+    const THREE = await import('three'); const { GLTFExporter } = await import('three/addons/exporters/GLTFExporter.js');
+    const { RoundedBoxGeometry } = await import('three/addons/geometries/RoundedBoxGeometry.js');
+    const sc = new THREE.Scene();
+    const body = new THREE.Mesh(new RoundedBoxGeometry(1.2, 1.5, .5, 6, .16), new THREE.MeshStandardMaterial({ color: 0x24242a, metalness: .5, roughness: .35 })); body.name = 'Body'; sc.add(body);
+    const screen = new THREE.Mesh(new THREE.PlaneGeometry(.9, .9), new THREE.MeshStandardMaterial({ color: 0x000000 })); screen.name = 'Screen'; screen.position.set(0, .14, .252); sc.add(screen);
+    { const uv = screen.geometry.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setY(i, 1 - uv.getY(i)); }   // UVs follow the glTF standard (top to bottom), like models from Blender
+    const knob = new THREE.Mesh(new THREE.CylinderGeometry(.09, .09, .06, 40), new THREE.MeshStandardMaterial({ color: 0x9a9aa2, metalness: 1, roughness: .3 })); knob.rotation.x = Math.PI / 2; knob.position.set(0, -.5, .26); sc.add(knob);
+    const buf = await new GLTFExporter().parseAsync(sc, { binary: true });
+    await show(URL.createObjectURL(new Blob([buf], { type: 'model/gltf-binary' })), 'Screen', 'example: built and exported to .glb in the browser');
+    setInterval(() => { drawScr(); hero?.screenChanged(); }, 10000);
+  } catch (e) { stage.classList.add('no-gl'); }
+  const take = f => { if (!f) return; if (!/\.(glb|gltf)$/i.test(f.name)) return toast('A .glb or .gltf file is required', { type: 'warn' }); show(URL.createObjectURL(f), $('glbScreen').value.trim(), f.name); };
+  $('glbDrop').addEventListener('files', e => take(e.detail.items[0]?.file));
+})();
+</script>
+</body>
+</html>

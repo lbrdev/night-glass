@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en" class="no-js" data-accent="iris">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Night Glass: all components</title>
+<meta name="description" content="Test page for the Night Glass design system: tokens, typography, buttons, glass, forms, layers, 3D heroes, motion, showcase sections.">
+<meta name="theme-color" content="#050506">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/night-glass.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<style>
+/* test page layout only; everything shown comes from night-glass.css classes */
+body{font-size:16px}
+.kit{max-width:var(--maxw);margin:0 auto;padding:calc(var(--nav) + 56px) var(--pad) 0}
+.kit-head{text-align:center;max-width:760px;margin:0 auto}
+.kit-head .lead{margin:20px auto 0}
+.blk{padding-top:clamp(80px,10vw,128px);scroll-margin-top:var(--nav)}
+.blk>header{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.blk>header h2{font-size:clamp(26px,3vw,36px);letter-spacing:-.03em}
+.blk>header p{color:var(--dim);font-size:14.5px;max-width:520px}
+.idx{font:500 13px var(--font-mono);color:var(--acc);margin-right:12px}
+.label{display:block;color:var(--dim);font-size:13px;margin:0 0 12px}
+.row2{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.stack{display:grid;gap:28px}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:860px){.cols2,.cols3{grid-template-columns:1fr}}
+code.k{font:13px var(--font-mono);color:var(--fg2);background:#ffffff0d;padding:2px 7px;border-radius:6px}
+
+/* palette */
+.palette{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.sw-tile{border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;background:var(--card)}
+.sw-tile i{display:block;height:64px;background:var(--c)}
+.sw-tile div{padding:10px 12px;font-size:13px}
+.sw-tile b{display:block;font:500 13px var(--font-mono);color:var(--fg)}
+.sw-tile span{color:var(--dim);font:12px var(--font-mono)}
+
+/* typography */
+.type-row{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--line)}
+.type-row:last-child{border-bottom:0}
+.type-row>span{color:var(--dim);font:12.5px var(--font-mono)}
+@media(max-width:640px){.type-row{grid-template-columns:1fr;gap:6px}}
+
+/* accent and glow controls */
+.ctrl{display:grid;gap:22px}
+.dotbtn{all:unset;cursor:pointer;width:34px;height:34px;border-radius:50%;background:rgb(var(--c));box-shadow:0 0 0 2px var(--bg),0 0 0 3px transparent;transition:box-shadow .2s,transform .3s var(--ease-spring)}
+.dotbtn:hover{transform:scale(1.08)}
+.dotbtn[aria-pressed=true]{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--fg)}
+.dotbtn:focus-visible{outline:var(--ring);outline-offset:6px}
+.glowbox{height:180px;border-radius:var(--r);border:1px solid var(--line);background:radial-gradient(60% 70% at 50% 60%,rgba(var(--glow),.28),transparent 70%),var(--card);transition:background 1.2s;display:grid;place-items:center;color:var(--fg2);font-size:14px}
+
+/* 3D */
+.stage3d{position:relative;height:clamp(300px,34vw,420px);border-radius:var(--r-lg);border:1px solid var(--line);overflow:hidden;
+  background:radial-gradient(60% 55% at 50% 58%,rgba(var(--glow),.2),transparent 70%),var(--card);transition:background 1.2s}
+.stage3d canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y}
+.stage3d .bubble{z-index:2}
+.stage3d .cap{position:absolute;left:16px;top:14px;z-index:1}
+.readout{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center}
+.no-gl canvas{display:none}
+.no-gl::after{content:"WebGL unavailable: a 3D object would be here";position:absolute;inset:0;display:grid;place-items:center;color:var(--dim);font-size:14px}
+
+/* reveal */
+.rv-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.rv-grid div{aspect-ratio:1;border-radius:var(--r-sm);background:var(--card2);border:1px solid var(--line);display:grid;place-items:center;font:600 18px var(--font-display);color:var(--dim)}
+@media(max-width:640px){.rv-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* placeholder objects for tiles and gallery */
+.orb{aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffffff2e,transparent 45%),radial-gradient(circle at 50% 50%,rgba(var(--c),.9),rgba(var(--c),.25) 62%,#0c0c0f 63%);box-shadow:inset 0 0 0 1px #ffffff14,0 30px 50px -28px #000}
+.shot .face{position:absolute;inset:0;display:grid;place-items:center;font:700 44px var(--font-display);letter-spacing:-.03em;background:radial-gradient(80% 80% at 50% 20%,rgba(var(--c),.45),transparent 70%)}
+.rail-wrap{position:relative}
+.rail-ctl{display:flex;justify-content:flex-end;gap:10px;margin-bottom:12px}
+.rail figure{margin:0}
+.rail figcaption{margin-top:12px}
+.rail figcaption b{display:block;font-weight:600;font-size:15px}
+.rail figcaption small{color:var(--dim);font-size:13px}
+.switch-art{width:min(100%,200px);aspect-ratio:1;margin:0 auto;border-radius:18%;background:linear-gradient(160deg,#f3f2ee,#d7d6d0);box-shadow:inset 0 1px 0 #fff,0 30px 60px -24px #000;display:grid;place-items:center}
+.switch-art i{width:34%;height:58%;border-radius:12px;background:linear-gradient(180deg,#fff,#e2e1dc);box-shadow:0 4px 0 #c5c4be}
+.vs .win .orb{width:min(100%,320px);margin:0 auto}
+.sheet h2{font-size:24px;margin-bottom:8px}
+.sheet .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:26px;flex-wrap:wrap}
+.sheet .x{position:absolute;right:14px;top:14px}
+.bubble-demo{position:relative;height:120px;border-radius:var(--r);border:1px dashed var(--line2)}
+.bubble-demo .bubble{left:24px;top:24px;transform:none}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Sections">
+  <a class="wordmark" href="#top">night<i>glass</i></a>
+  <div class="nav-links">
+    <a href="#tokens">Tokens</a><a href="#type">Type</a><a href="#buttons">Buttons</a><a href="#surfaces">Surfaces</a><a href="#forms">Forms</a>
+    <a href="#layers">Layers</a><a href="#hero3d">3D</a><a href="#motion">Motion</a><a href="#sections">Sections</a><a href="#pricing">Pricing</a><a href="kit-2.html">Kit 11–21 →</a>
+  </div>
+  <div class="nav-end">
+    <div class="menu-host">
+      <button class="chip-btn" id="menuBtn" data-menu aria-controls="kitMenu" aria-haspopup="menu" aria-expanded="false">More <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3.5 5.5 7 9l3.5-3.5"/></svg></button>
+      <div class="menu" id="kitMenu" role="menu" hidden><a role="menuitem" href="#tokens">Tokens</a><a role="menuitem" href="#hero3d">3D heroes</a><div class="sep" role="separator"></div><button role="menuitem" id="menuToast">Show toast</button></div>
+    </div>
+    <a class="btn sm pri" href="index.html">Orbi demo</a>
+    <button class="burger" aria-label="Menu" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path class="b1" d="M3 6h12"/><path class="b2" d="M3 12h12"/></svg></button>
+  </div>
+</nav>
+
+<main class="kit" id="top">
+  <div class="kit-head">
+    <p class="eyebrow">Test page</p>
+    <h1 class="display"><span>Night Glass,</span><span>all at once.</span></h1>
+    <p class="lead">Every token, component and technique of the system on one page. <b>Change the accent and glow at the top: everything recolors.</b></p>
+  </div>
+
+  <!-- 01 tokens -->
+  <section class="blk" id="tokens">
+    <header><h2><span class="idx">01</span>Accent, glow, colors</h2><p>The accent is set with the <code class="k">data-accent</code> attribute on &lt;html&gt;. The glow is driven by <code class="k">setGlow('r,g,b')</code>.</p></header>
+    <div class="cols2">
+      <div class="ctrl">
+        <div><span class="label" id="accLabel">Accent (data-accent)</span><div class="row2" id="accents" role="group" aria-labelledby="accLabel"></div></div>
+        <div><span class="label" id="glowLabel">Glow (setGlow)</span><div class="row2" id="glows" role="group" aria-labelledby="glowLabel"></div></div>
+        <div class="row2"><button class="btn sm" id="glowAcc">Glow = accent</button><span class="small dim" id="accName">iris</span></div>
+      </div>
+      <div class="glowbox">Background with rgba(var(--glow), .28)</div>
+    </div>
+    <div class="palette" id="palette" style="margin-top:28px"></div>
+  </section>
+
+  <!-- 02 typography -->
+  <section class="blk" id="type">
+    <header><h2><span class="idx">02</span>Typography</h2><p>Inter Tight 700 for headings, Inter for text. Tracking tightens as size grows.</p></header>
+    <div class="type-row"><span>.display</span><div class="display">One step.</div></div>
+    <div class="type-row"><span>.title</span><div class="title">Section heading</div></div>
+    <div class="type-row"><span>h1 (app)</span><h1>Account and settings</h1></div>
+    <div class="type-row"><span>h2</span><h2>Block subheading</h2></div>
+    <div class="type-row"><span>h3</span><h3>Card title</h3></div>
+    <div class="type-row"><span>.eyebrow</span><p class="eyebrow" style="margin:0">Section above the heading</p></div>
+    <div class="type-row"><span>.lead + b</span><p class="lead">The gray lead explains, <b>and one white phrase carries the meaning.</b></p></div>
+    <div class="type-row"><span>body 16/1.5</span><p>Regular text: short paragraphs, no extra words, with sensible line wrapping at any width.</p></div>
+    <div class="type-row"><span>.small .dim</span><p class="small dim">A caption or secondary note.</p></div>
+    <div class="type-row"><span>.tiny .mono .num</span><p class="tiny"><span class="mono">--acc: #a98bff</span> · <span class="num">1,234,567.89</span></p></div>
+    <div class="type-row"><span>.price</span><div class="price">$79</div></div>
+    <div class="type-row"><span>.wordmark</span><span class="wordmark">brand<i>mark</i></span></div>
+  </section>
+
+  <!-- 03 buttons -->
+  <section class="blk" id="buttons">
+    <header><h2><span class="idx">03</span>Liquid glass and buttons</h2><p>Move the cursor over a button: the glass stretches toward it and tilts, the label floats above the glass, the highlight follows. Press and hold: the glass squishes.</p></header>
+    <div class="stack">
+      <div><span class="label">Variants: .btn · .pri · .solid · .danger</span><div class="row2"><button class="btn">Clear glass</button><button class="btn pri">Primary action</button><button class="btn solid">White glass</button><button class="btn danger">Delete</button></div></div>
+      <div><span class="label">Sizes: .sm · regular · .lg · .icon-only</span><div class="row2"><button class="btn sm pri">Small</button><button class="btn pri">Regular</button><button class="btn lg pri">Large 52px</button><button class="btn icon-only" aria-label="Add"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 3v12M3 9h12"/></svg></button></div></div>
+      <div><span class="label">Parallax off: data-parallax="off"</span><div class="row2"><button class="btn" data-parallax="off">No parallax</button><button class="btn pri">With parallax</button></div></div>
+      <div><span class="label">States: :disabled · .wide</span><div class="row2" style="max-width:420px"><button class="btn" disabled>Unavailable</button><button class="btn pri wide">Full width</button></div></div>
+      <div><span class="label">Quiet: .ghost · .link · .chip-btn · .arr.glass arrows</span><div class="row2"><button class="ghost">Cancel</button><a class="link" href="#buttons">More about plans</a><button class="chip-btn">Product <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3.5 5.5 7 9l3.5-3.5"/></svg></button><button class="arr glass" aria-label="Back">‹</button><button class="arr glass" aria-label="Forward">›</button></div></div>
+      <div><span class="label">.ctas: a pair of hero buttons (stretch on phones)</span><div class="ctas" style="justify-content:flex-start"><a class="btn lg pri" href="#pricing">Buy from $79</a><a class="btn lg" href="#sections">Take a look</a></div></div>
+      <div><span class="label">.glass as a material for your own shapes</span><div class="row2"><div class="glass" style="width:220px;height:120px;border-radius:var(--r);display:grid;place-items:center;font-weight:600">Glass plate</div><div class="glass" style="width:120px;height:120px;border-radius:50%;display:grid;place-items:center">Circle</div></div></div>
+    </div>
+  </section>
+
+  <!-- 04 surfaces -->
+  <section class="blk" id="surfaces">
+    <header><h2><span class="idx">04</span>Surfaces, labels, notes</h2><p>Matte containers without shadows, status pills, glass tags and a “capsule” that lights up on hover.</p></header>
+    <div class="cols3">
+      <div class="card"><h3>.card</h3><p class="dim small" style="margin-top:8px">Matte container: #0c0c0f background, 1px line, radius 22.</p></div>
+      <a class="card" href="#surfaces"><h3>a.card</h3><p class="dim small">Link card: lifts 2px on hover and the border brightens.</p></a>
+      <div class="note"><b>.note</b> a note tinted with the accent: a hint, a condition, a warning.</div>
+    </div>
+    <div class="stack" style="margin-top:28px">
+      <div><span class="label">.pill · .acc · .good · .caps</span><div class="row2"><span class="pill">Draft</span><span class="pill acc">New</span><span class="pill good">Connected</span><span class="pill acc caps">pick</span></div></div>
+      <div><span class="label">.tag-glass</span><div class="row2"><span class="tag-glass">Category</span><span class="tag-glass">Weather</span></div></div>
+      <div><span class="label">.badge (hover)</span><div class="row2"><a class="badge" href="#surfaces"><b>Orbi Dial</b><small>dial for your home</small><span class="go">→</span></a><a class="badge" href="#surfaces"><b>Orbi Pro</b><span class="pill acc caps">soon</span><span class="go">→</span></a></div></div>
+    </div>
+  </section>
+
+  <!-- 05 forms -->
+  <section class="blk" id="forms">
+    <header><h2><span class="idx">05</span>Forms</h2><p>Fields darker than the background, accent focus with a soft ring, errors in red. iOS-style segments and switch.</p></header>
+    <div class="cols2">
+      <form class="card" id="demoForm" novalidate>
+        <label class="field"><span>Email</span><input class="input" type="email" id="email" placeholder="you@example.com" autocomplete="email"></label>
+        <label class="field"><span>Comment</span><textarea class="input" placeholder="Optional"></textarea></label>
+        <p class="small bad" id="formErr" hidden>We need your email to send the code.</p>
+        <div class="row2" style="margin-top:20px"><button class="btn pri">Send</button><span class="small dim">An empty email shows an error</span></div>
+      </form>
+      <div class="card stack">
+        <div><span class="label">.seg</span><div class="seg" role="group" aria-label="Period"><button aria-pressed="true">Day</button><button aria-pressed="false">Week</button><button aria-pressed="false">Month</button></div></div>
+        <div><span class="label">.seg.wide</span><div class="seg" role="group" aria-label="Theme" style="display:flex"><button aria-pressed="false" style="flex:1;text-align:center">Auto</button><button aria-pressed="true" style="flex:1;text-align:center">Dark</button></div></div>
+        <div class="row2"><label class="sw"><input type="checkbox" checked aria-label="Notifications"><span></span></label><span>Notifications</span></div>
+        <div class="row2"><label class="sw"><input type="checkbox" aria-label="Night mode"><span></span></label><span>Night mode</span></div>
+        <div><span class="label">.input.err</span><input class="input err" value="not-an-email" aria-label="Example of a field with an error" aria-invalid="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 layers -->
+  <section class="blk" id="layers">
+    <header><h2><span class="idx">06</span>Layers over the page</h2><p>The “More” menu in the header, a sheet (slides up from the bottom on phones), a toast capsule and an object’s speech bubble.</p></header>
+    <div class="row2"><button class="btn" id="openMenu">Open the header menu</button><button class="btn pri" data-open="kitSheet">Open sheet</button><button class="btn" id="showToast">Show toast</button></div>
+    <div class="bubble-demo" style="margin-top:24px"><div class="bubble on" id="staticBubble">Hi! I am a .bubble</div></div>
+  </section>
+
+  <!-- 07 3D -->
+  <section class="blk" id="hero3d">
+    <header><h2><span class="idx">07</span>3D heroes</h2><p>Two built-in objects for <code class="k">mountHero</code>. Drag to spin, tap to make it hop. Both follow the cursor.</p></header>
+    <div class="cols2">
+      <div>
+        <div class="stage3d" id="stPuck"><span class="tag-glass cap">model: 'puck'</span><canvas id="cvPuck" aria-label="3D dial: spin the rim"></canvas><div class="bubble" id="bubPuck"></div></div>
+        <div class="readout"><span class="pill acc num" id="puckVal">value 50</span><button class="btn sm" id="puckHop">hop()</button><button class="btn sm" id="puckGlow">setGlow → mint</button></div>
+      </div>
+      <div>
+        <div class="stage3d" id="stSlab"><span class="tag-glass cap">model: 'slab'</span><canvas id="cvSlab" aria-label="3D slab with a screen: spin the whole thing"></canvas><div class="bubble" id="bubSlab"></div></div>
+        <div class="readout"><span class="pill num" id="slabVal">rotation 0°</span><button class="btn sm" id="slabHop">hop()</button><button class="btn sm" id="slabGlow">setGlow → rose</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 motion -->
+  <section class="blk" id="motion">
+    <header><h2><span class="idx">08</span>Reveal and motion</h2><p>.rv blocks rise 26px over 1 s in a cascade driven by --d. The button replays the cascade.</p></header>
+    <div class="rv-grid" id="rvGrid"></div>
+    <div class="row2" style="margin-top:20px"><button class="btn" id="replay">Replay reveal</button><span class="small dim" id="rmNote"></span></div>
+  </section>
+
+  <!-- 09 showcase sections -->
+  <section class="blk" id="sections">
+    <header><h2><span class="idx">09</span>Showcase sections</h2><p>Tiles that dim their neighbors, split, before/after, facts, steps, cards, a scrolling rail and filter chips.</p></header>
+
+    <div class="head"><p class="eyebrow rv">.head</p><h2 class="title rv">A centered section heading.</h2><p class="rv">A gray paragraph below it, up to 600px wide.</p></div>
+    <span class="label">.tiles (hover one)</span>
+    <div class="tiles">
+      <article class="tile"><div class="art orb" style="--c:255,159,90;width:min(100%,200px)"></div><h3>Light</h3><p>Neighboring tiles fade into the dark on hover.</p></article>
+      <article class="tile"><div class="art orb" style="--c:169,139,255;width:min(100%,200px)"></div><h3>Music</h3><p>Neighbor text dims to 45%.</p></article>
+      <article class="tile"><div class="art orb" style="--c:108,196,255;width:min(100%,200px)"></div><h3>Climate</h3><p>The effect is off on touch screens.</p></article>
+    </div>
+
+    <div class="split" style="margin-top:96px">
+      <div class="txt"><p class="eyebrow">.split</p><h2 class="title">Text on the left, demo on the right.</h2><p>On phones it becomes a single centered column.</p><a class="btn pri" href="#pricing">Action</a></div>
+      <div class="orb" style="--c:var(--acc-rgb);width:min(100%,360px);margin:0 auto"></div>
+    </div>
+
+    <div class="vs" style="margin-top:96px">
+      <div class="side lose"><div class="art switch-art"><i></i></div><h3>Before</h3><ul><li>Smaller and washed out</li><li>Gray bullets</li><li>Pushed to the back</li></ul></div>
+      <div class="side win"><div class="art orb" style="--c:var(--acc-rgb)"></div><h3>After</h3><ul><li>Large and lit</li><li>Accent checkmarks</li><li>Glow behind</li></ul></div>
+    </div>
+
+    <div class="facts">
+      <div><b>.facts</b>Four columns of facts: a bold line and a note.</div>
+      <div><b>Two on a tablet</b>Below 860px the grid folds into two columns.</div>
+      <div><b>One on a phone</b>Below 520px a single column remains.</div>
+      <div><b>No icons</b>A fact stands on its text, not on a picture in a circle.</div>
+    </div>
+
+    <ol class="steps" style="margin-top:96px">
+      <li class="step"><h3>.steps</h3><p>Numbering is automatic via a CSS counter.</p></li>
+      <li class="step"><h3>Second step</h3><p>Radius-26 cards with a number in a circle.</p></li>
+      <li class="step"><h3>Third step</h3><p>On phones the steps stack in a column.</p></li>
+    </ol>
+
+    <div class="cards" style="margin-top:96px">
+      <a class="card" href="#sections"><span class="small dim">Oct 19 · 4 min</span><h3>.cards: article grid</h3><p>Link cards with an auto layout from 260px.</p></a>
+      <a class="card" href="#sections"><span class="small dim">Oct 12 · 6 min</span><h3>How to choose an accent</h3><p>A light pastel, one per product.</p></a>
+      <a class="card" href="#sections"><span class="small dim">Oct 3 · 3 min</span><h3>Why there is no light theme</h3><p>Glass and light only live in the dark.</p></a>
+    </div>
+
+    <div class="rail-wrap" style="margin-top:96px">
+      <div class="rail-ctl"><span class="label" style="margin:0 auto 0 0;align-self:center">.rail + .shot + .arr</span><button class="arr glass" id="railL" aria-label="Back">‹</button><button class="arr glass" id="railR" aria-label="Forward">›</button></div>
+      <div class="rail" id="rail"></div>
+      <div class="chips" id="chips" style="margin-top:8px"></div>
+    </div>
+  </section>
+
+  <!-- 10 pricing and questions -->
+  <section class="blk" id="pricing">
+    <header><h2><span class="idx">10</span>Pricing and questions</h2><p>An offer block with a glow, plans (Pro glows in the --glow color), a checklist, an FAQ on &lt;details&gt;.</p></header>
+    <div class="offer">
+      <h2 class="title">Pick your plan</h2>
+      <p>Pay once. No subscription.</p>
+      <div class="tiers">
+        <div class="tier"><div class="tname">Orbi</div><div class="price">$79</div><div class="tsub">one device</div><ul class="ticks"><li>An item with its own checkmark</li><li>Second item</li><li>Third item</li></ul><button class="btn buy">Buy Orbi</button></div>
+        <div class="tier pro"><div class="tname">Orbi Pro <span class="pill acc caps">pick</span></div><div class="price">$129</div><div class="tsub">every device in the home</div><ul class="ticks"><li>Everything in Orbi</li><li>Custom modes</li><li>Wall mount</li></ul><button class="btn pri buy">Buy Orbi Pro</button></div>
+      </div>
+    </div>
+    <div class="faq" style="margin-top:72px">
+      <details open><summary>How do I open a question?</summary><p>Click the row: the “+” rotates into a “×” and the answer slides into view.</p></details>
+      <details><summary>Can I open several at once?</summary><p>Yes, each &lt;details&gt; works on its own.</p></details>
+      <details><summary>Does it work without JavaScript?</summary><p>The FAQ, links and layout work without scripts. Scripts add the highlight, reveal, 3D and toasts.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-links"><a href="#tokens">Tokens</a><a href="#buttons">Buttons</a><a href="#hero3d">3D</a><a href="index.html">Orbi demo</a><a href="kit-2.html">Kit 11–21: charts and account</a></div>
+  <p>.foot: one quiet line. Night Glass, test page.</p>
+</footer>
+
+<dialog class="sheet" id="kitSheet" aria-labelledby="shT">
+  <button class="btn icon-only sm x" data-close aria-label="Close">✕</button>
+  <h2 id="shT">Sheet .sheet</h2>
+  <p>Centered on desktop, slides up from the bottom on phones. Closes with the X, the backdrop or Esc, and focus stays inside.</p>
+  <label class="field"><span>Name</span><input class="input" placeholder="For example, Living room"></label>
+  <div class="actions"><button class="ghost" data-close>Cancel</button><button class="btn pri" data-close="save">Save</button></div>
+</dialog>
+
+<script type="module">
+import { setGlow, toast } from '../assets/night-glass.js';
+const $ = id => document.getElementById(id);
+const root = document.documentElement;
+const css = n => getComputedStyle(root).getPropertyValue(n).trim();
+
+// ---------------------------------------------------------------- accent, glow, palette
+const ACCENTS = ['iris', 'ember', 'mint', 'sky', 'rose', 'lime'];
+const GLOWS = [['Amber', '255,159,90'], ['Iris', '169,139,255'], ['Sky', '108,196,255'], ['Mint', '95,227,180'], ['Rose', '255,122,168'], ['Lime', '198,243,107']];
+const TOKENS = ['--bg', '--card', '--card2', '--field', '--line', '--line2', '--fg', '--fg2', '--dim', '--dim-glow', '--mute', '--faint', '--acc', '--on-acc', '--good', '--warn', '--bad'];
+function palette() {
+  $('palette').innerHTML = TOKENS.map(t => `<div class="sw-tile"><i style="--c:var(${t})"></i><div><b>${t}</b><span>${css(t)}</span></div></div>`).join('');
+}
+function pressOnly(group, btn) { [...group.children].forEach(b => b.setAttribute('aria-pressed', b === btn)); }
+ACCENTS.forEach((a, i) => {
+  const b = document.createElement('button'); b.className = 'dotbtn'; b.setAttribute('aria-label', a); b.setAttribute('aria-pressed', i === 0);
+  root.setAttribute('data-accent', a); b.style.setProperty('--c', css('--acc-rgb'));
+  b.onclick = () => { root.setAttribute('data-accent', a); pressOnly($('accents'), b); $('accName').textContent = a; palette(); glowAll(css('--acc-rgb')); };
+  $('accents').append(b);
+});
+root.setAttribute('data-accent', 'iris');
+GLOWS.forEach(([n, c]) => {
+  const b = document.createElement('button'); b.className = 'dotbtn'; b.setAttribute('aria-label', 'Glow: ' + n); b.setAttribute('aria-pressed', false); b.style.setProperty('--c', c);
+  b.onclick = () => { pressOnly($('glows'), b); glowAll(c); };
+  $('glows').append(b);
+});
+$('glowAcc').onclick = () => { pressOnly($('glows'), null); glowAll(css('--acc-rgb')); };
+palette();
+
+// ---------------------------------------------------------------- menu and sheet: from the core (data-menu, data-open)
+$('menuToast').onclick = () => toast('Toast from the menu', { type: 'good' });
+$('openMenu').onclick = () => { scrollTo({ top: 0 }); setTimeout(() => $('menuBtn').click(), 50); };
+$('kitSheet').addEventListener('close', e => { if (e.target.returnValue === 'save') toast('Saved', { type: 'good' }); });
+$('showToast').onclick = () => toast('Toast: a short confirmation of an action');
+document.querySelectorAll('.buy').forEach(b => b.onclick = () => toast('Test page: nothing to buy'));
+
+// ---------------------------------------------------------------- forms
+$('demoForm').onsubmit = e => {
+  e.preventDefault();
+  const ok = /.+@.+\..+/.test($('email').value);
+  $('email').classList.toggle('err', !ok); $('email').setAttribute('aria-invalid', !ok); $('formErr').hidden = ok;
+  if (ok) toast('Code sent to ' + $('email').value);
+};
+document.querySelectorAll('.seg').forEach(g => g.addEventListener('click', e => { const b = e.target.closest('button'); if (b) pressOnly(g, b); }));
+
+// ---------------------------------------------------------------- reveal
+const rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+$('rmNote').textContent = rm ? 'You have “reduce motion” on: the cascade is disabled.' : 'The delay grows by 0.06 s with each block.';
+$('rvGrid').innerHTML = Array.from({ length: 12 }, (_, i) => `<div class="rv" style="--d:${(i * 0.06).toFixed(2)}s">${i + 1}</div>`).join('');
+const rvIO = new IntersectionObserver(es => { for (const e of es) if (e.isIntersecting) { e.target.classList.add('in'); rvIO.unobserve(e.target); } }, { threshold: .15 });
+document.querySelectorAll('#rvGrid .rv').forEach(el => rvIO.observe(el));
+$('replay').onclick = () => {
+  const els = document.querySelectorAll('#rvGrid .rv');
+  els.forEach(el => { el.style.transition = 'none'; el.classList.remove('in'); });
+  requestAnimationFrame(() => requestAnimationFrame(() => els.forEach(el => { el.style.transition = ''; el.classList.add('in'); })));
+};
+
+// ---------------------------------------------------------------- rail and chips
+const FACES = [['Amber', '255,159,90', 'Light'], ['Iris', '169,139,255', 'Music'], ['Sky', '108,196,255', 'Climate'], ['Mint', '95,227,180', 'Climate'], ['Rose', '255,122,168', 'Light'], ['Lime', '198,243,107', 'Music'], ['Graphite', '134,134,139', 'Light']];
+function drawRail(filter) {
+  $('rail').innerHTML = FACES.filter(f => !filter || f[2] === filter).map(([n, c, k], i) =>
+    `<figure><div class="shot"><div class="face" style="--c:${c}">${String(i + 1).padStart(2, '0')}</div></div><figcaption><b>${n}</b><small>${k}</small></figcaption></figure>`).join('');
+}
+['All', 'Light', 'Music', 'Climate'].forEach((n, i) => {
+  const b = document.createElement('button'); b.textContent = n; b.className = i ? '' : 'on'; b.setAttribute('aria-pressed', !i);
+  b.onclick = () => { [...$('chips').children].forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); }); drawRail(i ? n : null); };
+  $('chips').append(b);
+});
+drawRail();
+$('railL').onclick = () => $('rail').scrollBy({ left: -280, behavior: 'smooth' });
+$('railR').onclick = () => $('rail').scrollBy({ left: 280, behavior: 'smooth' });
+
+// ---------------------------------------------------------------- 3D
+await document.fonts.ready;
+const heroes = [];
+function glowAll(c) { setGlow(c); heroes.forEach(h => h.setGlow(c)); }
+function sayIn(hero, bub, stage, text, ms = 1800) {
+  bub.textContent = text; bub.classList.add('on'); const until = performance.now() + ms;
+  (function place() {
+    const p = hero.project(0.55, 0.3, 0.3);
+    const x = Math.max(12, Math.min(p.x + 8, stage.clientWidth - bub.offsetWidth - 12)), y = Math.max(44, p.y - bub.offsetHeight);
+    bub.style.transform = `translate(${x | 0}px,${y | 0}px)`;
+    if (performance.now() < until) requestAnimationFrame(place); else bub.classList.remove('on');
+  })();
+}
+// dial screen: value arc
+const puckScr = Object.assign(document.createElement('canvas'), { width: 512, height: 512 });
+let puckV = 50;
+function drawPuck() {
+  const g = puckScr.getContext('2d'), s = 512, c = 256, col = css('--acc-rgb');
+  g.clearRect(0, 0, s, s); g.fillStyle = '#000'; g.beginPath(); g.arc(c, c, c, 0, 7); g.fill();
+  g.lineCap = 'round'; g.lineWidth = 22; g.strokeStyle = '#ffffff14'; g.beginPath(); g.arc(c, c, 200, Math.PI * .75, Math.PI * 2.25); g.stroke();
+  g.shadowColor = `rgba(${col},.9)`; g.shadowBlur = 24; g.strokeStyle = `rgb(${col})`; g.beginPath(); g.arc(c, c, 200, Math.PI * .75, Math.PI * (.75 + 1.5 * Math.max(.003, puckV / 100))); g.stroke(); g.shadowBlur = 0;
+  g.fillStyle = '#f5f5f7'; g.textAlign = 'center'; g.font = '700 128px "Inter Tight", Inter, sans-serif'; g.fillText(Math.round(puckV), c, c + 44);
+  g.fillStyle = `rgb(${col})`; g.font = '600 34px Inter, sans-serif'; g.fillText('VALUE', c, c + 110);
+  $('puckVal').textContent = 'value ' + Math.round(puckV);
+}
+// slab screen: clock and date
+const slabScr = Object.assign(document.createElement('canvas'), { width: 512, height: 724 });
+function drawSlab() {
+  const g = slabScr.getContext('2d'), w = 512, h = 724, col = css('--acc-rgb'), d = new Date();
+  const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, `rgba(${col},.55)`); gr.addColorStop(.6, '#0c0c0f'); gr.addColorStop(1, '#050506');
+  g.fillStyle = gr; g.fillRect(0, 0, w, h);
+  g.fillStyle = '#f5f5f7'; g.textAlign = 'center'; g.font = '700 150px "Inter Tight", Inter, sans-serif';
+  g.fillText(d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }), w / 2, 320);
+  g.font = '500 38px Inter, sans-serif'; g.fillStyle = '#d6d6db'; g.fillText(d.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' }), w / 2, 390);
+}
+drawPuck(); drawSlab();
+try {
+  const { mountHero } = await import('../assets/night-glass-3d.js');
+  const puck = await mountHero($('cvPuck'), { model: 'puck', screen: puckScr, anchor: $('stPuck'),
+    onSpin: d => { puckV = Math.max(0, Math.min(100, puckV + d * 8)); drawPuck(); puck?.screenChanged(); },
+    onTap: () => sayIn(puck, $('bubPuck'), $('stPuck'), 'Hop!'),
+    onPowered: () => sayIn(puck, $('bubPuck'), $('stPuck'), 'Spin the rim', 2400) });
+  let deg = 0;
+  const slab = await mountHero($('cvSlab'), { model: 'slab', screen: slabScr, anchor: $('stSlab'),
+    onSpin: d => { deg += d * 57.3; $('slabVal').textContent = `rotation ${Math.round(deg)}°`; },
+    onTap: () => sayIn(slab, $('bubSlab'), $('stSlab'), 'Ha, that tickles'),
+    onPowered: () => sayIn(slab, $('bubSlab'), $('stSlab'), 'You can spin me', 2400) });
+  heroes.push(puck, slab);
+  setInterval(() => { drawSlab(); slab.screenChanged(); }, 10000);
+  $('puckHop').onclick = () => puck.hop();
+  $('slabHop').onclick = () => slab.hop();
+  $('puckGlow').onclick = () => puck.setGlow('95,227,180');
+  $('slabGlow').onclick = () => slab.setGlow('255,122,168');
+  // dial screen recolors when the accent changes
+  new MutationObserver(() => { drawPuck(); drawSlab(); puck.screenChanged(); slab.screenChanged(); }).observe(root, { attributes: true, attributeFilter: ['data-accent'] });
+} catch (e) {
+  $('stPuck').classList.add('no-gl'); $('stSlab').classList.add('no-gl'); console.warn(e);
+}
+</script>
+</body>
+</html>

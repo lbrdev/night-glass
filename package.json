@@ -1,0 +1,16 @@
+{
+  "name": "night-glass",
+  "version": "1.7.0",
+  "private": true,
+  "description": "Night Glass: a design system for dark product showcases and a Claude Code plugin. This package holds only the demo page tests.",
+  "type": "module",
+  "scripts": {
+    "serve": "node tests/serve.mjs",
+    "test": "playwright test",
+    "test:smoke": "playwright test tests/smoke.spec.mjs",
+    "test:update": "playwright test tests/visual.spec.mjs --update-snapshots"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  }
+}

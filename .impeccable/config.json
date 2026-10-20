@@ -1,0 +1,206 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "skills/night-glass/demo/index.html"
+        ],
+        "createdAt": "2026-10-19T21:08:32.909Z",
+        "reason": "Night Glass: Inter/Inter Tight are the style's typography per the brief, open fonts with Cyrillic support"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "skills/night-glass/demo/index.html"
+        ],
+        "createdAt": "2026-10-19T21:08:33.030Z",
+        "reason": "false positive: .offer has clamp(16px,4vw,56px) padding, checked in the browser at 390 and 1440"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "skills/night-glass/demo/index.html"
+        ],
+        "createdAt": "2026-10-19T21:08:36.993Z",
+        "reason": "Night Glass: the object's screen light and the Pro plan glow are part of the style per the brief"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "skills/night-glass/demo/kit.html"
+        ],
+        "createdAt": "2026-10-19T21:42:06.156Z",
+        "reason": "Night Glass: the Pro plan glow is part of the style per the brief"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "skills/night-glass/demo/kit.html"
+        ],
+        "createdAt": "2026-10-19T21:42:06.268Z",
+        "reason": "Night Glass: Inter/Inter Tight are the style's typography per the brief"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "skills/night-glass/demo/kit.html"
+        ],
+        "createdAt": "2026-10-19T21:42:06.388Z",
+        "reason": "false positive: .card 26px, .offer 80px 56px, measured in the browser at 1440"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "skills/night-glass/demo/kit-2.html"
+        ],
+        "createdAt": "2026-10-19T22:26:49.279Z",
+        "reason": "Night Glass: Inter/Inter Tight are the style's typography per the brief"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "skills/night-glass/demo/kit-2.html"
+        ],
+        "createdAt": "2026-10-19T22:26:49.381Z",
+        "reason": "false positive: .card 26px, .tbl cells 16px, the padding is there"
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "skills/night-glass/demo/kit-2.html"
+        ],
+        "createdAt": "2026-10-19T22:26:49.492Z",
+        "reason": "indeterminate loading progress is an endless bar by design, disabled under reduced motion"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "skills/night-glass/demo/kit-2.html"
+        ],
+        "createdAt": "2026-10-19T22:26:49.602Z",
+        "reason": "the .input:focus focus ring is accessibility, not a decorative glow"
+      },
+      {
+        "rule": "bounce-easing",
+        "value": "cubic-bezier(.2, .9, .25, 1.35)",
+        "files": [
+          "skills/night-glass/assets/night-glass.css"
+        ],
+        "createdAt": "2026-10-19T22:38:57.221Z",
+        "reason": "Night Glass: the --ease-spring/--ease-pop/sheet springs give buttons and popovers their character; charts have no overshoot"
+      },
+      {
+        "rule": "bounce-easing",
+        "value": "cubic-bezier(.2, .9, .3, 1.2)",
+        "files": [
+          "skills/night-glass/assets/night-glass.css"
+        ],
+        "createdAt": "2026-10-19T22:38:57.331Z",
+        "reason": "Night Glass: the --ease-spring/--ease-pop/sheet springs give buttons and popovers their character; charts have no overshoot"
+      },
+      {
+        "rule": "bounce-easing",
+        "value": "cubic-bezier(.2, .9, .25, 1.15)",
+        "files": [
+          "skills/night-glass/assets/night-glass.css"
+        ],
+        "createdAt": "2026-10-19T22:38:57.455Z",
+        "reason": "Night Glass: the --ease-spring/--ease-pop/sheet springs give buttons and popovers their character; charts have no overshoot"
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "skills/night-glass/demo/kit.html"
+        ],
+        "createdAt": "2026-10-19T22:38:57.570Z",
+        "reason": "indeterminate .progress.indet from the shared CSS is an endless bar by design, turned off under reduced motion"
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "skills/night-glass/demo/index.html"
+        ],
+        "createdAt": "2026-10-19T22:38:57.704Z",
+        "reason": "indeterminate .progress.indet from the shared CSS is an endless bar by design, turned off under reduced motion"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "skills/night-glass/demo/*.html"
+        ],
+        "createdAt": "2026-10-19T22:45:49.650Z",
+        "reason": "Night Glass: Inter/Inter Tight are the style's typography per the brief"
+      },
+      {
+        "rule": "bounce-easing",
+        "value": "cubic-bezier(.2, .9, .25, 1.15)",
+        "files": [
+          "skills/night-glass/demo/*.html"
+        ],
+        "createdAt": "2026-10-19T22:45:49.758Z",
+        "reason": "Night Glass: the sheet entrance is the spring from the reference"
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "skills/night-glass/demo/*.html"
+        ],
+        "createdAt": "2026-10-19T22:45:49.898Z",
+        "reason": "indeterminate progress from the shared CSS is endless by design, turned off under reduced motion"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "skills/night-glass/demo/*.html"
+        ],
+        "createdAt": "2026-10-19T22:45:50.023Z",
+        "reason": "the .input:focus focus ring and the screen/Pro plan light are style traits and accessibility"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "skills/night-glass/demo/*.html"
+        ],
+        "createdAt": "2026-10-19T22:45:50.138Z",
+        "reason": "false positive: .card 26px, .offer 80/56px, .tbl cells 16px, measured in the browser"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "skills/night-glass/assets/night-glass.css"
+        ],
+        "createdAt": "2026-10-19T22:51:48.611Z",
+        "reason": "the FAQ ::details-content height (smooth opening via interpolate-size) and the carousel dot width 8→24px are tiny isolated elements"
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "skills/night-glass/templates/landing.html"
+        ],
+        "createdAt": "2026-10-20T10:34:20.971Z",
+        "reason": "false positive: the template links night-glass.css next to itself (assets are copied beside it), so the detector cannot read the type scale"
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "night-glass",
+  "version": "1.7.0",
+  "description": "The Night Glass design system for Claude Code: a dark product showcase, liquid glass with parallax, a live 3D object in the hero, spring motion. Tokens, components, Tailwind/shadcn, a starter template and demos.",
+  "author": {
+    "name": "lbrdev",
+    "url": "https://github.com/lbrdev"
+  },
+  "homepage": "https://github.com/lbrdev/night-glass",
+  "repository": "https://github.com/lbrdev/night-glass",
+  "license": "MIT",
+  "keywords": ["design-system", "landing", "dark", "glassmorphism", "three.js", "tailwind", "shadcn"]
+}

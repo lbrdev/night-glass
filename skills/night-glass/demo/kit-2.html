@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en" class="no-js" data-accent="iris">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Night Glass: charts, tabs, tab bar</title>
+<meta name="description" content="Night Glass test page 2: charts and metrics, tabs, tab bar, side nav, table, forms, loading, tooltips, navigation, states, feed and code.">
+<meta name="theme-color" content="#050506">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/night-glass.css">
+<style>
+/* test page layout; the elements shown are night-glass.css classes */
+.kit{max-width:var(--maxw);margin:0 auto;padding:calc(var(--nav) + 56px) var(--pad) 0}
+.kit-head{text-align:center;max-width:760px;margin:0 auto}
+.kit-head .lead{margin:20px auto 0}
+.blk{padding-top:clamp(80px,10vw,128px);scroll-margin-top:var(--nav)}
+.blk>header{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.blk>header h2{font-size:clamp(26px,3vw,36px);letter-spacing:-.03em}
+.blk>header p{color:var(--dim);font-size:14.5px;max-width:520px}
+.idx{font:500 13px var(--font-mono);color:var(--acc);margin-right:12px}
+.label{display:block;color:var(--dim);font-size:13px;margin:0 0 12px}
+.row2{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.stack{display:grid;gap:28px}
+.stack>*,.cols2>*,.cols-chart>*{min-width:0}   /* grid cells do not stretch to their content (tabs, code, tables) */
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cols-chart{display:grid;grid-template-columns:1.6fr 1fr;gap:20px;margin-top:20px}
+@media(max-width:860px){.cols2,.cols-chart{grid-template-columns:1fr}}
+code.k{font:13px var(--font-mono);color:var(--fg2);background:#ffffff0d;padding:2px 7px;border-radius:var(--r-2xs)}
+.toggle-view{margin-left:auto}
+.phone{position:relative;width:min(100%,340px);height:600px;margin:0 auto;border-radius:44px;padding:14px;background:#0a0a0d;box-shadow:inset 0 0 0 1px #ffffff14,0 40px 80px -30px #000;overflow:hidden}
+.phone .screen{position:relative;height:100%;border-radius:32px;overflow:hidden;background:var(--bg);padding:52px 18px 0}
+.phone .screen h3{font-size:24px;margin-bottom:14px}
+.phone .screen .card{padding:16px;margin-bottom:12px}
+.phone .tabbar.in-frame{left:8px;right:8px;bottom:8px}
+.app{display:grid;grid-template-columns:240px 1fr;gap:20px;align-items:start}
+.app .card h3{margin-bottom:6px}
+@media(max-width:760px){.app{grid-template-columns:1fr}}
+.panel-text{color:var(--dim);max-width:560px}
+.sk-card{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:center}
+</style>
+</head>
+<body class="has-tabbar">
+
+<nav class="nav" aria-label="Sections">
+  <a class="wordmark" href="kit.html">night<i>glass</i></a>
+  <div class="nav-links">
+    <a href="#charts">Charts</a><a href="#tabs">Tabs</a><a href="#tabbar">Tab bar</a><a href="#side">Menu</a><a href="#table">Table</a>
+    <a href="#forms2">Forms</a><a href="#loading">Loading</a><a href="#tips">Tooltips</a><a href="#navi">Navigation</a><a href="#states">States</a><a href="#feed">Feed</a>
+  </div>
+  <div class="nav-end">
+    <a class="btn sm" href="kit.html">← Kit 01–10</a><a class="btn sm" href="kit-3.html">Kit 22+ →</a>
+    <button class="burger" aria-label="Menu" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path class="b1" d="M3 6h12"/><path class="b2" d="M3 12h12"/></svg></button>
+  </div>
+</nav>
+
+<main class="kit">
+  <div class="kit-head">
+    <p class="eyebrow">Test page, part 2</p>
+    <h1 class="display"><span>Data, tabs</span><span>and the rest.</span></h1>
+    <p class="lead">Blocks 11–21 continue kit 01–10. <b>Cite the block number in your notes.</b></p>
+  </div>
+
+  <!-- 11 charts -->
+  <section class="blk" id="charts">
+    <header><h2><span class="idx">11</span>Metrics and charts</h2><p>Module <code class="k">night-glass-charts.js</code>. Hover the charts and step through them with the arrow keys. The filters above recalculate everything at once.</p></header>
+    <div class="filters">
+      <div class="seg" role="group" aria-label="Period" id="period"><button aria-pressed="false" data-n="7">7 days</button><button aria-pressed="true" data-n="12">12 weeks</button><button aria-pressed="false" data-n="24">24 weeks</button></div>
+      <select class="input" style="width:auto;height:40px" aria-label="Region" id="region"><option value="1">All regions</option><option value=".62">Kyiv</option><option value=".38">Lviv</option></select>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="cols-chart">
+      <div class="chart-card">
+        <div class="chart-head"><div><h3>Weekly sales</h3><p>Units, both models</p></div><div class="legend" id="lgLine"></div><button class="btn sm toggle-view" data-for="line">Table</button></div>
+        <div class="chart" id="cLine" style="--h:280px"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-head"><div><h3>Sales channels</h3><p>Share of orders</p></div><button class="btn sm toggle-view" data-for="donut">Table</button></div>
+        <div class="donut-wrap" id="donutWrap"><div class="chart" id="cDonut" style="--h:200px"></div><div class="legend" id="lgDonut"></div></div>
+      </div>
+    </div>
+    <div class="chart-card" style="margin-top:20px">
+      <div class="chart-head"><div><h3>Revenue by month</h3><p>Thousands of dollars. A single series is drawn in the accent, the peak is labeled</p></div><button class="btn sm toggle-view" data-for="bar">Table</button></div>
+      <div class="chart" id="cBar" style="--h:240px"></div>
+    </div>
+    <div class="chart-card" style="margin-top:20px">
+      <div class="chart-head"><div><h3>Quarter comparison</h3><p>Grouped bars, a legend for two or more series</p></div><div class="legend" id="lgBar2"></div></div>
+      <div class="chart" id="cBar2" style="--h:220px"></div>
+    </div>
+  </section>
+
+  <!-- 12 tabs -->
+  <section class="blk" id="tabs">
+    <header><h2><span class="idx">12</span>Tabs</h2><p>A glass capsule springs under the selected tab. The ←/→ arrows switch tabs. The <code class="k">.tabs.line</code> variant is a quiet line for document pages.</p></header>
+    <div class="stack">
+      <div>
+        <div class="tabs" role="tablist" aria-label="Device section">
+          <button role="tab" aria-selected="true" aria-controls="p1" id="t1">Overview</button><button role="tab" aria-selected="false" aria-controls="p2" id="t2">Settings</button><button role="tab" aria-selected="false" aria-controls="p3" id="t3">History</button><button role="tab" aria-selected="false" aria-controls="p4" id="t4">Updates</button>
+        </div>
+        <div role="tabpanel" id="p1" aria-labelledby="t1"><p class="panel-text">Overview: the main summary lives here. The panel fades in with a 4px shift.</p></div>
+        <div role="tabpanel" id="p2" aria-labelledby="t2" hidden><p class="panel-text">Settings: forms and switches from blocks 05 and 16.</p></div>
+        <div role="tabpanel" id="p3" aria-labelledby="t3" hidden><p class="panel-text">History: the event feed from block 21.</p></div>
+        <div role="tabpanel" id="p4" aria-labelledby="t4" hidden><p class="panel-text">Updates: install progress from block 17.</p></div>
+      </div>
+      <div>
+        <div class="tabs line" role="tablist" aria-label="Documentation">
+          <button role="tab" aria-selected="true" aria-controls="q1" id="u1">Setup</button><button role="tab" aria-selected="false" aria-controls="q2" id="u2">Usage</button><button role="tab" aria-selected="false" aria-controls="q3" id="u3">Questions</button>
+        </div>
+        <div role="tabpanel" id="q1" aria-labelledby="u1"><p class="panel-text">The line under the tab moves just like the capsule.</p></div>
+        <div role="tabpanel" id="q2" aria-labelledby="u2" hidden><p class="panel-text">Usage: short paragraphs and code examples.</p></div>
+        <div role="tabpanel" id="q3" aria-labelledby="u3" hidden><p class="panel-text">Questions: the FAQ from block 10.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 tab bar -->
+  <section class="blk" id="tabbar">
+    <header><h2><span class="idx">13</span>Tab bar</h2><p>A floating glass bar at the bottom for phones. On a narrow screen it is real and sticks to the bottom; on desktop it is shown inside a phone frame.</p></header>
+    <div class="phone" aria-label="Phone screen example">
+      <div class="screen">
+        <h3>Home</h3>
+        <div class="card"><b>Living room</b><p class="small dim">Light 72%, 21.5°</p></div>
+        <div class="card"><b>Bedroom</b><p class="small dim">Light off</p></div>
+        <div class="card"><b>Kitchen</b><p class="small dim">Music, volume 18</p></div>
+        <nav class="tabbar in-frame" aria-label="App sections">
+          <a href="#tabbar" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+          <a href="#tabbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>Scenes</a>
+          <a href="#tabbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21h4"/></svg><span class="count">3</span>Events</a>
+          <a href="#tabbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profile</a>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 side nav -->
+  <section class="blk" id="side">
+    <header><h2><span class="idx">14</span>App side nav</h2><p>For dashboards and admin panels (Operate mode): a glass column, groups with uppercase labels, counters.</p></header>
+    <div class="app">
+      <nav class="sidenav" aria-label="Dashboard">
+        <h3>Devices</h3>
+        <a href="#side" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>All devices<span class="count">4</span></a>
+        <a href="#side"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>Scenes</a>
+        <a href="#side"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 19V5M10 19v-8M16 19v-5M22 19H2"/></svg>Statistics</a>
+        <h3>Account</h3>
+        <a href="#side"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18"/></svg>Purchases</a>
+        <a href="#side"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6a7 7 0 0 0 0 2.4l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2"/></svg>Settings</a>
+      </nav>
+      <div class="card"><h3>All devices</h3><p class="dim small">Section content. The active item is highlighted and its icon takes the accent.</p></div>
+    </div>
+  </section>
+
+  <!-- 15 table -->
+  <section class="blk" id="table">
+    <header><h2><span class="idx">15</span>Table</h2><p>Numbers are right-aligned with tabular figures. The header is sticky, a click on a heading sorts, and pagination sits below the table.</p></header>
+    <div class="tbl-wrap">
+      <table class="tbl" id="orders">
+        <thead><tr><th><button data-k="name">Customer</button></th><th><button data-k="model">Model</button></th><th>Status</th><th class="num" aria-sort="descending"><button data-k="sum">Amount</button></th><th class="num"><button data-k="date">Date</button></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="row2" style="justify-content:space-between;margin-top:16px">
+      <span class="small dim">Showing 1–6 of 48</span>
+      <nav class="pager" aria-label="Pages"><button aria-label="Back">‹</button><button aria-current="page">1</button><button>2</button><button>3</button><span class="gap">…</span><button>8</button><button aria-label="Next">›</button></nav>
+    </div>
+  </section>
+
+  <!-- 16 forms -->
+  <section class="blk" id="forms2">
+    <header><h2><span class="idx">16</span>Forms: checkboxes, select, slider, search</h2><p>Checkboxes and radios fill with the accent and a springy tick. The slider fills up to the thumb. Search shows a key hint.</p></header>
+    <div class="cols2">
+      <div class="card stack">
+        <div><span class="label">.check</span><div class="stack" style="gap:12px"><label class="check"><input type="checkbox" checked> Notify me about discounts</label><label class="check"><input type="checkbox"> Weekly report</label><label class="check"><input type="checkbox" disabled> Unavailable option</label></div></div>
+        <div role="radiogroup" aria-labelledby="dlv"><span class="label" id="dlv">.radio: delivery</span><div class="stack" style="gap:12px"><label class="radio"><input type="radio" name="dl" checked> Courier</label><label class="radio"><input type="radio" name="dl"> Postal service</label><label class="radio"><input type="radio" name="dl"> Pickup</label></div></div>
+      </div>
+      <div class="card stack">
+        <div><span class="label" id="brl">.range: brightness: <b id="brv">72%</b></span><input class="range" type="range" min="0" max="100" value="72" aria-labelledby="brl" id="br"></div>
+        <label class="field" style="margin:0"><span>select.input</span><select class="input"><option>Living room</option><option>Bedroom</option><option>Kitchen</option></select></label>
+        <div><span class="label">.search</span><label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="input" type="search" placeholder="Find a device" aria-label="Search" id="q"><kbd>/</kbd></label></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17 loading -->
+  <section class="blk" id="loading">
+    <header><h2><span class="idx">17</span>Progress and loading</h2><p>A progress bar with statuses, indeterminate loading, a spinner in a button, a skeleton instead of a blank.</p></header>
+    <div class="cols2">
+      <div class="card stack">
+        <div><span class="label">Firmware update: <b id="upv">0%</b></span><div class="progress"><i id="up"></i></div></div>
+        <div><span class="label">.progress.warn: battery 18%</span><div class="progress warn" style="--p:18%"><i></i></div></div>
+        <div><span class="label">.progress.good: done</span><div class="progress good" style="--p:100%"><i></i></div></div>
+        <div><span class="label">.progress.indet: searching for devices</span><div class="progress indet"><i></i></div></div>
+        <div class="row2"><button class="btn pri" id="busyBtn">Save</button><span class="small dim">Press it: a spinner for 1.5 s</span></div>
+      </div>
+      <div class="card stack">
+        <span class="label" style="margin:0">.sk: card skeleton</span>
+        <div class="sk-card"><div class="sk" style="height:48px;border-radius:50%"></div><div style="display:grid;gap:8px"><div class="sk" style="height:14px;width:60%"></div><div class="sk" style="height:12px;width:85%"></div></div></div>
+        <div class="sk" style="height:120px"></div>
+        <div class="sk" style="height:14px;width:40%"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18 tooltips, avatars, counters -->
+  <section class="blk" id="tips">
+    <header><h2><span class="idx">18</span>Tooltips, avatars, counters</h2><p>A tooltip is set with the <code class="k">data-tip</code> attribute and appears on hover and on keyboard focus; it steers clear of the screen edges on its own.</p></header>
+    <div class="stack">
+      <div><span class="label">data-tip</span><div class="row2"><button class="btn" data-tip="Saves the scene for every room">Hover me</button><button class="btn icon-only" aria-label="Help" data-tip="Help opens in a new window">?</button><a class="link" href="#tips" data-tip="A tooltip on a link">Link with a tooltip</a></div></div>
+      <div><span class="label">.ava · .sm · .lg · .ava-group</span><div class="row2"><span class="ava sm">A</span><span class="ava">OC</span><span class="ava lg">LW</span><div class="ava-group"><span class="ava" style="--acc-rgb:255,159,90">I</span><span class="ava" style="--acc-rgb:95,227,180">M</span><span class="ava" style="--acc-rgb:108,196,255">N</span><span class="ava" style="--acc-rgb:134,134,139;color:var(--fg2)">+5</span></div></div></div>
+      <div><span class="label">.count · .count.dot</span><div class="row2"><button class="btn">Inbox <span class="count">12</span></button><button class="btn">Updates <span class="count dot" aria-label="new items"></span></button><span class="count">99+</span></div></div>
+    </div>
+  </section>
+
+  <!-- 19 navigation -->
+  <section class="blk" id="navi">
+    <header><h2><span class="idx">19</span>Navigation: breadcrumbs, pages, steps</h2><p>Breadcrumbs above the heading, pagination, checkout steps.</p></header>
+    <div class="stack">
+      <div><span class="label">.crumbs</span><nav class="crumbs" aria-label="Path"><a href="#navi">Home</a><i>/</i><a href="#navi">Devices</a><i>/</i><span aria-current="page">Orbi Dial</span></nav></div>
+      <div><span class="label">.pager</span><nav class="pager" aria-label="Pages"><button aria-label="Back">‹</button><button>1</button><span class="gap">…</span><button>4</button><button aria-current="page">5</button><button>6</button><span class="gap">…</span><button>12</button><button aria-label="Next">›</button></nav></div>
+      <div><span class="label">.stepper</span><ol class="stepper" id="stepper"><li class="done">Cart</li><li class="done">Delivery</li><li aria-current="step">Payment</li><li>Done</li></ol>
+        <div class="row2" style="margin-top:20px"><button class="btn sm" id="stBack">Back</button><button class="btn sm pri" id="stNext">Next</button></div></div>
+    </div>
+  </section>
+
+  <!-- 20 states -->
+  <section class="blk" id="states">
+    <header><h2><span class="idx">20</span>States: banner, notes, empty</h2><p>A quiet full-width banner, four kinds of notes with an icon (color is not the only cue), an empty state with an action.</p></header>
+    <div class="banner" style="border-radius:var(--r-note)">Firmware 2.4 is now available. <a href="#loading">Update</a></div>
+    <div class="stack" style="margin-top:20px;gap:12px">
+      <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><div><b>Tip.</b> The dial can be mounted on a wall with a magnet.</div></div>
+      <div class="note good"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg><div><b>Done.</b> The device is connected to the hub.</div></div>
+      <div class="note warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg><div><b>Battery 18%.</b> Enough for about two weeks.</div></div>
+      <div class="note bad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></svg><div><b>No connection.</b> The hub has not responded for over 5 minutes.</div></div>
+    </div>
+    <div class="empty" style="margin-top:20px">
+      <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div>
+      <h3>No scenes yet</h3><p>A scene remembers light, music and temperature and turns them on with one tap.</p><button class="btn pri">Create a scene</button>
+    </div>
+  </section>
+
+  <!-- 21 feed and code -->
+  <section class="blk" id="feed">
+    <header><h2><span class="idx">21</span>Event feed and code</h2><p>A timeline with the current event marked; a code block with a “Copy” button; the keys <kbd>Ctrl</kbd> <kbd>K</kbd>.</p></header>
+    <div class="cols2">
+      <ol class="timeline">
+        <li class="on"><time>Oct 20, 9:12 AM</time><b>Firmware 2.4 installed</b><p>New gestures: a double tap turns everything off.</p></li>
+        <li><time>Oct 18, 9:40 PM</time><b>Scene “Evening” added</b><p>Light 30%, music 12, climate 22°.</p></li>
+        <li><time>Oct 12, 2:03 PM</time><b>Dial connected</b><p>Living room, Home Assistant hub.</p></li>
+      </ol>
+      <pre class="code" id="code"><button class="btn sm copy" id="copy">Copy</button><span class="c">// 3D hero on the page</span>
+<span class="k">import</span> { mountHero } <span class="k">from</span> <span class="s">'./night-glass-3d.js'</span>
+
+<span class="k">const</span> hero = <span class="k">await</span> mountHero(canvas, {
+  model: <span class="s">'puck'</span>,
+  onSpin: d =&gt; setValue(v + d * 8),
+})</pre>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-links"><a href="kit.html">Kit 01–10</a><a href="#charts">Charts</a><a href="#tabs">Tabs</a><a href="kit-3.html">Kit 22+</a><a href="index.html">Orbi demo</a></div>
+  <p>Night Glass, test page 2.</p>
+</footer>
+
+<!-- the real tab bar: visible only on a narrow screen -->
+<nav class="tabbar" aria-label="Quick sections">
+  <a href="#charts" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 19V5M10 19v-8M16 19v-5M22 19H2"/></svg>Charts</a>
+  <a href="#tabs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 9h18"/></svg>Tabs</a>
+  <a href="#table"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>Table</a>
+  <a href="#states"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21h4"/></svg><span class="count">4</span>More</a>
+</nav>
+
+<script type="module">
+import { toast } from '../assets/night-glass.js';
+import { lineChart, barChart, donutChart, sparkline, dataTable, fmt } from '../assets/night-glass-charts.js';
+const $ = id => document.getElementById(id);
+
+// ---------------------------------------------------------------- data (fictional, deterministic)
+const rnd = (seed => () => (seed = (seed * 16807) % 2147483647) / 2147483647)(42);
+const BASE = Array.from({ length: 24 }, (_, i) => ({ a: 120 + i * 9 + rnd() * 40, b: 60 + i * 6 + rnd() * 30 }));
+const weekLabel = i => { const d = new Date(2026, 9, 19 - (23 - i) * 7); return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); };
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'];
+const REV = [312, 340, 398, 371, 455, 482, 470, 530, 612, 588];
+const state = { n: 12, k: 1 };
+const lineData = () => {
+  const rows = BASE.slice(24 - state.n);
+  return { title: 'Weekly sales', labels: rows.map((_, i) => weekLabel(24 - state.n + i)),
+    series: [{ name: 'Orbi', values: rows.map(r => Math.round(r.a * state.k)) }, { name: 'Orbi Pro', values: rows.map(r => Math.round(r.b * state.k)) }] };
+};
+const donutData = () => ({ title: 'Sales channels', items: [{ name: 'Website', value: Math.round(540 * state.k) }, { name: 'Marketplace', value: Math.round(310 * state.k) }, { name: 'Stores', value: Math.round(190 * state.k) }, { name: 'Other', value: Math.round(60 * state.k) }] });
+const barData = () => ({ title: 'Revenue by month', labels: MONTHS, series: [{ name: 'Revenue', values: REV.map(v => Math.round(v * state.k)) }] });
+
+// ---------------------------------------------------------------- charts
+const line = lineChart($('cLine'), { ...lineData(), legend: $('lgLine'), format: fmt.compact });
+const donut = donutChart($('cDonut'), { ...donutData(), legend: $('lgDonut'), centerLabel: 'orders' });
+const bar = barChart($('cBar'), { ...barData(), format: v => v + 'K' , tipFormat: v => '$' + fmt.full(v) + 'K' });
+barChart($('cBar2'), { title: 'Quarter comparison', labels: ['Q1', 'Q2', 'Q3', 'Q4'], legend: $('lgBar2'),
+  series: [{ name: '2025', values: [820, 940, 1010, 1180] }, { name: '2026', values: [1050, 1290, 1610, 1420] }] });
+
+function stats() {
+  const l = lineData(), a = l.series[0].values, b = l.series[1].values, sum = v => v.reduce((x, y) => x + y, 0);
+  const half = Math.floor(a.length / 2), cur = sum(a.slice(half)) + sum(b.slice(half)), prev = sum(a.slice(0, half)) + sum(b.slice(0, half)), d = (cur - prev) / prev * 100;
+  const tiles = [
+    ['Sold in period', fmt.full(sum(a) + sum(b)), d, a.map((v, i) => v + b[i])],
+    ['Revenue', '$' + fmt.compact(sum(a) * 79 + sum(b) * 129), d * .9, a.map((v, i) => v * 79 + b[i] * 129)],
+    ['Average order', '$' + fmt.full(Math.round((sum(a) * 79 + sum(b) * 129) / (sum(a) + sum(b)))), 2.4, a.map((v, i) => (v * 79 + b[i] * 129) / (v + b[i]))],
+    ['Returns', '1.8%', -0.6, a.map((_, i) => 2.4 - i * .05 + rnd() * .3)],
+  ];
+  const box = $('stats'); box.replaceChildren();
+  tiles.forEach(([lbl, val, delta, trend], i) => {
+    const el = document.createElement('div'); el.className = 'stat';
+    const good = i === 3 ? delta < 0 : delta > 0;   // for returns, down is good
+    el.innerHTML = '<span class="lbl"></span><span class="val"></span><span class="delta"><b></b> vs previous period</span><div class="chart spark"></div>';
+    el.querySelector('.lbl').textContent = lbl; el.querySelector('.val').textContent = val;
+    const b = el.querySelector('b'); b.className = good ? 'up' : 'down'; b.textContent = (delta > 0 ? '↑ +' : '↓ ') + Math.abs(delta).toFixed(1) + '%';
+    box.append(el); sparkline(el.querySelector('.spark'), trend);
+  });
+}
+stats();
+
+// the filters above recalculate everything; while “loading” the charts stay semi-transparent
+function refetch() {
+  document.querySelectorAll('#charts .chart:not(.spark)').forEach(c => c.classList.add('busy'));
+  setTimeout(() => {
+    line.update(lineData()); donut.update(donutData()); bar.update(barData()); stats();
+    document.querySelectorAll('#charts .chart').forEach(c => c.classList.remove('busy'));
+  }, 450);
+}
+$('period').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; [...$('period').children].forEach(x => x.setAttribute('aria-pressed', x === b)); state.n = +b.dataset.n; refetch(); });
+$('region').addEventListener('change', e => { state.k = +e.target.value; refetch(); });
+
+// table view for each chart
+const views = { line: [() => $('cLine'), lineData], donut: [() => $('donutWrap'), donutData], bar: [() => $('cBar'), barData] };
+document.querySelectorAll('.toggle-view').forEach(btn => {
+  const [box, data] = views[btn.dataset.for]; let tbl;
+  btn.addEventListener('click', () => {
+    if (!tbl) { tbl = document.createElement('div'); tbl.className = 'chart-table'; dataTable(tbl, data()); box().after(tbl); box().hidden = true; btn.textContent = 'Chart'; }
+    else { tbl.remove(); tbl = null; box().hidden = false; btn.textContent = 'Table'; }
+  });
+});
+
+// ---------------------------------------------------------------- sortable table
+const ORD = [['Olivia Carter', 'Orbi Pro', 'Paid', 129, '2026-10-19'], ['Andrew Miller', 'Orbi', 'Shipped', 79, '2026-10-18'], ['Irene Baker', 'Orbi', 'Paid', 158, '2026-10-18'],
+  ['Max Turner', 'Orbi Pro', 'Refunded', 129, '2026-10-16'], ['Natalie Ward', 'Orbi', 'Shipped', 79, '2026-10-15'], ['Sam Reed', 'Orbi Pro', 'Paid', 258, '2026-10-14']];
+const PILL = { 'Paid': 'good', 'Shipped': 'acc', 'Refunded': '' };
+let sortK = 'sum', dir = -1;
+function renderOrders() {
+  const idx = { name: 0, model: 1, sum: 3, date: 4 }[sortK];
+  const rows = [...ORD].sort((a, b) => (a[idx] > b[idx] ? 1 : a[idx] < b[idx] ? -1 : 0) * dir);
+  const tb = $('orders').tBodies[0]; tb.replaceChildren();
+  for (const [name, model, status, sum, date] of rows) {
+    const r = tb.insertRow();
+    const who = document.createElement('div'); who.className = 'who';
+    const av = document.createElement('span'); av.className = 'ava sm'; av.textContent = name.split(' ').map(w => w[0]).join('');
+    who.append(av, document.createTextNode(name)); r.insertCell().append(who);
+    r.insertCell().textContent = model;
+    const p = document.createElement('span'); p.className = 'pill ' + PILL[status]; p.textContent = status; r.insertCell().append(p);
+    const c1 = r.insertCell(); c1.className = 'num'; c1.textContent = '$' + fmt.full(sum);
+    const c2 = r.insertCell(); c2.className = 'num'; c2.textContent = new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+  $('orders').querySelectorAll('th').forEach(th => { const b = th.querySelector('button'); if (b?.dataset.k === sortK) th.setAttribute('aria-sort', dir > 0 ? 'ascending' : 'descending'); else th.removeAttribute('aria-sort'); });
+}
+$('orders').tHead.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; dir = sortK === b.dataset.k ? -dir : (b.dataset.k === 'name' || b.dataset.k === 'model' ? 1 : -1); sortK = b.dataset.k; renderOrders(); });
+renderOrders();
+document.querySelectorAll('.pager').forEach(p => p.addEventListener('click', e => { const b = e.target.closest('button'); if (!b || b.getAttribute('aria-label')) return; p.querySelector('[aria-current]')?.removeAttribute('aria-current'); b.setAttribute('aria-current', 'page'); }));
+
+// ---------------------------------------------------------------- forms, loading, steps, code
+$('br').addEventListener('input', e => $('brv').textContent = e.target.value + '%');
+addEventListener('keydown', e => { if (e.key === '/' && document.activeElement?.tagName !== 'INPUT') { e.preventDefault(); $('q').focus(); } });
+let up = 0; const upT = setInterval(() => { up = Math.min(100, up + 3 + Math.random() * 6); $('up').style.setProperty('--p', up + '%'); $('upv').textContent = Math.round(up) + '%'; if (up >= 100) { clearInterval(upT); $('up').parentElement.classList.add('good'); } }, 400);
+$('busyBtn').addEventListener('click', e => {
+  const b = e.currentTarget; if (b.disabled) return; const txt = b.textContent; b.disabled = true;
+  b.replaceChildren(Object.assign(document.createElement('span'), { className: 'spin' }), document.createTextNode('Saving'));
+  setTimeout(() => { b.disabled = false; b.textContent = txt; toast('Saved'); }, 1500);
+});
+const steps = [...$('stepper').children]; let step = 2;
+const paint = () => steps.forEach((li, i) => { li.classList.toggle('done', i < step); if (i === step) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); });
+$('stNext').onclick = () => { step = Math.min(steps.length, step + 1); paint(); };
+$('stBack').onclick = () => { step = Math.max(0, step - 1); paint(); };
+$('copy').onclick = async () => { const t = $('code').innerText.replace('Copy', '').trim(); try { await navigator.clipboard.writeText(t); toast('Code copied'); } catch { toast('Could not copy'); } };
+document.querySelector('.empty .btn').onclick = () => toast('The scene wizard opens here');
+</script>
+</body>
+</html>

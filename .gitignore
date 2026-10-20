@@ -1,0 +1,8 @@
+.impeccable/hook.cache.json
+.impeccable/config.local.json
+.DS_Store
+Thumbs.db
+node_modules/
+test-results/
+tests/__screenshots__/
+playwright-report/

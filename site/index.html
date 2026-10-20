@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" class="no-js" data-accent="iris">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Night Glass: design system</title>
+<meta name="description" content="Night Glass: a dark product showcase with liquid glass, a 3D hero and spring motion. Live demos of every component.">
+<meta name="theme-color" content="#050506">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/night-glass.css">
+<style>
+.hub{max-width:var(--maxw);margin:0 auto;padding:calc(var(--nav) + clamp(48px,9vh,110px)) var(--pad) 0}
+.hub-head{text-align:center;max-width:780px;margin:0 auto}
+.hub-head .lead{margin:22px auto 0}
+.hub-head .ctas{margin-top:30px}
+.pages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:clamp(56px,8vw,88px)}
+.pages a.card{gap:10px;padding:26px}
+.pages .n{font:500 13px var(--font-mono);color:var(--acc)}
+.pages h2{font-size:21px;letter-spacing:-.02em}
+.pages p{color:var(--dim);font-size:14.5px}
+@media(max-width:1000px){.pages{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.pages{grid-template-columns:1fr}}
+.install{max-width:760px;margin:clamp(72px,10vw,120px) auto 0}
+.install h2{font-size:clamp(26px,3vw,34px);letter-spacing:-.03em;margin-bottom:14px}
+.install p{color:var(--dim);margin-bottom:18px}
+.install .code{margin-bottom:10px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<nav class="nav" aria-label="Main">
+  <a class="wordmark" href="./">night<i>glass</i></a>
+  <div class="nav-links"><a href="demo/index.html">Showcase</a><a href="demo/kit.html">Kit 01–10</a><a href="demo/kit-2.html">Kit 11–21</a><a href="demo/kit-3.html">Kit 22–45</a></div>
+  <div class="nav-end"><a class="btn sm pri" href="#install">Install</a><button class="burger" aria-label="Menu" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path class="b1" d="M3 6h12"/><path class="b2" d="M3 12h12"/></svg></button></div>
+</nav>
+
+<main class="hub" id="main" tabindex="-1">
+  <div class="hub-head">
+    <p class="eyebrow">A design system for Claude Code</p>
+    <h1 class="display"><span>Night Glass.</span><span>Glass after dark.</span></h1>
+    <p class="lead">A near-black canvas, one accent, liquid-glass buttons, a live 3D object and spring motion. <b>Live demos of every component below.</b></p>
+    <div class="ctas"><a class="btn lg pri" href="demo/kit.html">Open the kit</a><a class="btn lg" href="demo/index.html">Demo showcase</a></div>
+  </div>
+
+  <div class="pages">
+    <a class="card" href="demo/index.html"><span class="n">Showcase</span><h2>Orbi</h2><p>A landing page for a fictional smart-home knob: 3D hero, modes, scenes, pricing, FAQ.</p></a>
+    <a class="card" href="demo/kit.html"><span class="n">Blocks 01–10</span><h2>Foundations</h2><p>Tokens, typography, buttons and glass, forms, layers, both 3D objects, showcase sections.</p></a>
+    <a class="card" href="demo/kit-2.html"><span class="n">Blocks 11–21</span><h2>Data and dashboard</h2><p>Charts and metrics, tabs, tab bar, sidebar, table, uploads, navigation.</p></a>
+    <a class="card" href="demo/kit-3.html"><span class="n">Blocks 22–45</span><h2>Dialogs, sites, apps</h2><p>Dialogs, menus, toasts, articles, code sign-in, gallery, command palette, dates, files, 3D from .glb.</p></a>
+  </div>
+
+  <section class="install" id="install">
+    <h2>Install in Claude Code</h2>
+    <p>Run two commands in Claude Code, then ask for “a site in the Night Glass style”.</p>
+    <pre class="code">/plugin marketplace add lbrdev/night-glass
+/plugin install night-glass@night-glass</pre>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-links"><a href="https://github.com/lbrdev/night-glass">GitHub</a><a href="demo/kit.html">Kit</a><a href="demo/index.html">Demo</a></div>
+  <p>Night Glass, MIT.</p>
+</footer>
+<script type="module" src="assets/night-glass.js"></script>
+</body>
+</html>

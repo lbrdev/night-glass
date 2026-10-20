@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "night-glass",
+  "description": "Night Glass: a design system for dark product showcases, for Claude Code.",
+  "owner": {
+    "name": "lbrdev",
+    "url": "https://github.com/lbrdev"
+  },
+  "plugins": [
+    {
+      "name": "night-glass",
+      "description": "A dark product showcase: liquid glass, a three.js 3D hero, spring motion. Tokens, components, Tailwind/shadcn, a starter template and demos.",
+      "source": "./",
+      "category": "design"
+    }
+  ]
+}

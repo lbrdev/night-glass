@@ -1,0 +1,47 @@
+/* Night Glass for Tailwind CSS v4. In the project's main CSS:
+     @import "tailwindcss";
+     @import "./night-glass/tailwind.css";      <- this file
+     @import "./night-glass/night-glass.css";   <- components (.btn, .nav, .offer ...) and variables
+   Utilities: bg-bg, bg-card, text-dim, border-line, text-acc, rounded-card, font-display, ease-spring, tracking-display ... */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-fg2: var(--fg2);
+  --color-dim: var(--dim);
+  --color-mute: var(--mute);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line2: var(--line2);
+  --color-card: var(--card);
+  --color-card2: var(--card2);
+  --color-field: var(--field);
+  --color-acc: var(--acc);
+  --color-on-acc: var(--on-acc);
+  --color-good: var(--good);
+  --color-warn: var(--warn);
+  --color-bad: var(--bad);
+
+  --font-sans: var(--font);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+
+  --radius-xs: var(--r-xs);
+  --radius-sm: var(--r-sm);
+  --radius-card: var(--r);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+
+  --tracking-display: -0.035em;
+  --tracking-title: -0.03em;
+  --tracking-tight: -0.025em;
+
+  --ease-spring: var(--ease-spring);
+  --ease-pop: var(--ease-pop);
+  --ease-out-soft: var(--ease-out);
+  --ease-calm: var(--ease-calm);
+
+  --spacing-page: var(--pad);
+  --spacing-section: var(--section);
+  --container-page: var(--maxw);
+  --container-text: var(--maxw-text);
+}

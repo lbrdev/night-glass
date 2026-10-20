@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en" class="no-js" data-accent="ember">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Orbi: one turn, whole home</title>
+<meta name="description" content="Orbi Dial: a round knob for your desk or wall. Light, music and climate in a single turn.">
+<meta name="theme-color" content="#050506">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/night-glass.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<style>
+/* Orbi page: its own sections only; everything else lives in night-glass.css */
+body{font-size:17px}
+.hero .display{margin-top:2px}
+.hero-stage .flat{display:none;place-items:center;height:100%}
+.no-gl .flat{display:grid}
+.no-gl canvas{display:none}
+.modes-dots{display:flex;gap:8px;justify-content:center;margin:0 0 18px}
+.modes-dots button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 10px;border-radius:999px;font-size:13.5px;color:var(--dim);transition:background .2s,color .2s}
+.modes-dots button i{width:8px;height:8px;border-radius:50%;background:rgb(var(--c))}
+.modes-dots button:hover{color:var(--fg);background:#ffffff0a}
+.modes-dots button[aria-pressed=true]{color:var(--fg);background:#ffffff12}
+.modes-dots button:focus-visible{outline:var(--ring);outline-offset:2px}
+
+/* flat knob in CSS: dark metal body, knurled rim, round glass with a screen */
+.dial{position:relative;aspect-ratio:1;border-radius:50%;padding:9%;
+  background:radial-gradient(circle at 50% 50%,#000 58%,transparent 59%),repeating-conic-gradient(from 0deg,#2c2c33 0 1.2deg,#45454e 1.2deg 2.4deg);
+  box-shadow:0 0 0 1px #ffffff12,inset 0 2px 1px #ffffff22,0 34px 60px -24px #000,0 0 80px -30px rgba(var(--c,var(--acc-rgb)),.55)}
+.dial canvas{width:100%;height:100%;border-radius:50%}
+.dial::after{content:"";position:absolute;inset:9%;border-radius:50%;background:linear-gradient(135deg,#ffffff26,transparent 40%);pointer-events:none}
+.tile .art{width:min(100%,250px)}
+
+/* scenes: live preview + settings */
+.look{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center;max-width:1000px;margin:0 auto}
+.look .dial{width:min(100%,400px);margin:0 auto}
+.controls{display:grid;gap:30px}
+.ctl>span{display:block;color:var(--dim);font-size:14px;margin-bottom:12px}
+.swatch{display:flex;gap:12px;flex-wrap:wrap}
+.swatch button{all:unset;width:34px;height:34px;border-radius:50%;cursor:pointer;background:rgb(var(--c));box-shadow:0 0 0 2px var(--bg),0 0 0 3px transparent;transition:box-shadow .2s,transform .3s var(--ease-spring)}
+.swatch button:hover{transform:scale(1.08)}
+.swatch button[aria-pressed=true]{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--fg)}
+.swatch button:focus-visible{outline:var(--ring);outline-offset:6px}
+@media(max-width:860px){.look{grid-template-columns:1fr}.controls{text-align:center}.swatch,.chips{justify-content:center}}
+
+.vs .art.dial{width:min(100%,380px)}
+.vs .lose .switch{width:min(100%,200px);aspect-ratio:1;margin:0 auto;border-radius:18%;background:linear-gradient(160deg,#f3f2ee,#d7d6d0);box-shadow:inset 0 1px 0 #fff,0 30px 60px -24px #000;display:grid;place-items:center;filter:saturate(.55) brightness(.7)}
+.vs .lose .switch i{width:34%;height:58%;border-radius:12px;background:linear-gradient(180deg,#fff,#e2e1dc);box-shadow:0 4px 0 #bdbcb6,0 6px 10px #0003}
+.after{text-align:center;color:var(--dim);font-size:15px;margin-top:28px}
+.offer .tier .pill{margin-left:auto}
+.offer-note{margin-top:22px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="nav wait" aria-label="Main">
+  <a class="wordmark" href="#top">orb<i>i</i></a>
+  <div class="nav-links">
+    <a href="#modes">Modes</a><a href="#scenes">Scenes</a><a href="#install">Setup</a><a href="#price">Pricing</a><a href="#faq">FAQ</a>
+  </div>
+  <div class="nav-end">
+    <a class="btn sm hide-sm" href="#faq">Sign in</a>
+    <a class="btn sm pri" href="#price">Buy</a>
+    <button class="burger" aria-label="Menu" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path class="b1" d="M3 6h12"/><path class="b2" d="M3 12h12"/></svg></button>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-top">
+    <p class="eyebrow rv" style="--d:.05s">Orbi Dial · the knob for your smart home</p>
+    <h1 class="display"><span class="rv" style="--d:.17s">One turn.</span><span class="rv" style="--d:.29s">Whole home.</span></h1>
+  </div>
+  <div class="hero-stage" id="slot">
+    <canvas id="stage" aria-label="Orbi knob in 3D: drag to spin it, click to change mode"></canvas>
+    <div class="flat"><div class="dial" style="width:min(62vw,300px)"><canvas id="flatScreen" width="480" height="480"></canvas></div></div>
+    <div class="bubble" id="bubble" role="status"></div>
+  </div>
+  <div class="hero-bottom">
+    <div class="modes-dots rv" style="--d:1.35s" role="group" aria-label="Mode"></div>
+    <p class="lead rv" style="--d:1.5s">Light, music and climate <b>on one round knob that sits right where your hand is</b>, with no app to open and nothing to say out loud.</p>
+    <div class="ctas rv" style="--d:1.65s"><a class="btn lg pri" href="#price">Buy from $79</a><a class="btn lg" href="#modes">See what it does</a></div>
+    <p class="hero-note rv" style="--d:1.8s">Works with Zigbee, Matter and Home Assistant.</p>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+  <section class="section" id="modes">
+    <div class="wrap">
+      <div class="head"><p class="eyebrow rv">Modes</p><h2 class="title rv">It knows what you want to turn.</h2><p class="rv">Tap to switch modes, turn to change the value. The screen shows exactly one number: the one you are turning.</p></div>
+      <div class="tiles">
+        <article class="tile rv"><div class="art dial" style="--c:255,159,90"><canvas data-mode="0" width="400" height="400"></canvas></div><h3>Light</h3><p>Brightness for a whole room or a single lamp. Double-tap to switch everything off.</p></article>
+        <article class="tile rv" style="--d:.08s"><div class="art dial" style="--c:169,139,255"><canvas data-mode="1" width="400" height="400"></canvas></div><h3>Music</h3><p>Volume for whichever speaker is playing. Press and hold to pause.</p></article>
+        <article class="tile rv" style="--d:.16s"><div class="art dial" style="--c:108,196,255"><canvas data-mode="2" width="400" height="400"></canvas></div><h3>Climate</h3><p>Thermostat temperature in half-degree steps. The ring glows while it heats.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="scenes">
+    <div class="wrap">
+      <div class="head"><p class="eyebrow rv">Scenes</p><h2 class="title rv">A color for every room.</h2><p class="rv">The ring and screen match your interior. Pick a color and a mode to see how it will look in your home.</p></div>
+      <div class="look">
+        <div class="dial rv" id="lookDial"><canvas id="lookScreen" width="480" height="480"></canvas></div>
+        <div class="controls rv">
+          <div class="ctl"><span id="swLabel">Ring color</span><div class="swatch" role="group" aria-labelledby="swLabel"></div></div>
+          <div class="ctl"><span id="mdLabel">What it shows</span><div class="chips" role="group" aria-labelledby="mdLabel"></div></div>
+        </div>
+      </div>
+      <div class="facts">
+        <div class="rv"><b>Aluminum and glass</b>A solid aluminum body under sapphire glass that your keys can't scratch.</div>
+        <div class="rv" style="--d:.06s"><b>Quiet click</b>48 soft detents per turn. You feel the value without looking.</div>
+        <div class="rv" style="--d:.12s"><b>Six months per charge</b>The screen sleeps when the knob is idle. Charges over USB-C.</div>
+        <div class="rv" style="--d:.18s"><b>Night mode</b>After midnight, brightness drops to a minimum so it never wakes you.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head"><p class="eyebrow rv">Compare</p><h2 class="title rv">A switch does one thing. Orbi controls everything that turns.</h2></div>
+      <div class="vs">
+        <div class="side lose rv"><div class="art switch"><i></i></div><h3>Ordinary switch</h3><ul><li>On or off</li><li>One lamp, one room</li><li>Stuck where the electrician put it</li></ul></div>
+        <div class="side win rv" style="--d:.1s"><div class="art dial" style="--c:var(--acc-rgb)"><canvas data-mode="0" data-value="64" width="480" height="480"></canvas></div><h3>Orbi Dial</h3><ul><li>Smooth brightness, volume and degrees</li><li>Any device in your home</li><li>Sits wherever suits you</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="install">
+    <div class="wrap">
+      <div class="head"><p class="eyebrow rv">Setup</p><h2 class="title rv">Three minutes. Done.</h2><p class="rv">No screwdriver, no wiring. Just your phone nearby.</p></div>
+      <ol class="steps">
+        <li class="step rv"><h3>Place the knob near your hub</h3><p>It wakes on its own and shows a four-digit code.</p></li>
+        <li class="step rv" style="--d:.08s"><h3>Enter the code in your hub</h3><p>Home Assistant, SmartThings or any Matter hub finds it in seconds.</p></li>
+        <li class="step rv" style="--d:.16s"><h3>Choose what to turn</h3><p>Select your lamps, speaker and thermostat, and the modes appear on the knob.</p></li>
+      </ol>
+      <p class="after rv">Changed your mind? Reset it and pass it on. One long press and it forgets your home.</p>
+    </div>
+  </section>
+
+  <section class="section" id="price">
+    <div class="offer rv">
+      <h2 class="title">Orbi Dial</h2>
+      <p>Pay once. No subscription, no cloud by default.</p>
+      <div class="tiers">
+        <div class="tier">
+          <div class="tname">Orbi</div>
+          <div class="price">$79</div><div class="tsub">one knob</div>
+          <ul class="ticks"><li>Light, music and climate</li><li>Zigbee and Matter</li><li>Six ring colors</li><li>Over-the-air updates</li></ul>
+          <a class="btn" href="#faq">Buy Orbi</a>
+        </div>
+        <div class="tier pro">
+          <div class="tname">Orbi Pro <span class="pill acc caps">popular</span></div>
+          <div class="price">$129</div><div class="tsub">knob + wall mount and stand</div>
+          <ul class="ticks"><li>Everything in Orbi</li><li>Custom modes: blinds, fan, anything</li><li>Gestures: double-tap, press and hold</li><li>Magnetic wall mount</li></ul>
+          <a class="btn pri" href="#faq">Buy Orbi Pro</a>
+        </div>
+      </div>
+      <p class="small dim offer-note">Free shipping in 1–2 days. 30-day returns.</p>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <div class="wrap">
+      <div class="head"><h2 class="title rv">FAQ</h2></div>
+      <div class="faq rv">
+        <details><summary>Do I need internet?</summary><p>No. Orbi talks to your hub over Zigbee or Thread, right inside your home. Internet is only needed for updates.</p></details>
+        <details><summary>Which devices are supported?</summary><p>Anything your hub can see: lamps, relays, speakers, thermostats, blinds. If a device has a slider in its app, you can turn it with the knob.</p></details>
+        <details><summary>How long does the battery last?</summary><p>About six months with typical use. When 10% is left, the ring blinks once in the morning.</p></details>
+        <details><summary>Can I use more than one?</summary><p>Yes, one in every room if you like. Each remembers its own devices and its own color.</p></details>
+        <details><summary>What if I don't have a hub?</summary><p>Orbi works directly with up to eight Zigbee lamps. The other modes unlock when you add a hub.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-links"><a href="#modes">Modes</a><a href="#install">Setup</a><a href="#price">Pricing</a><a href="#faq">FAQ</a></div>
+  <p>Orbi is a fictional product made to demo the Night Glass design system.</p>
+</footer>
+
+<script type="module">
+import { setGlow, toast } from '../assets/night-glass.js';
+
+// knob modes: color (r,g,b), label, unit, range, step
+const MODES = [
+  { name: 'Light', c: '255,159,90', unit: '%', min: 0, max: 100, step: 1, v: 72 },
+  { name: 'Music', c: '169,139,255', unit: '', min: 0, max: 30, step: 1, v: 18 },
+  { name: 'Climate', c: '108,196,255', unit: '°', min: 16, max: 28, step: .5, v: 21.5 },
+];
+const SWATCHES = [['Amber', '255,159,90'], ['Iris', '169,139,255'], ['Sky', '108,196,255'], ['Mint', '95,227,180'], ['Rose', '255,122,168'], ['Lime', '198,243,107']];
+
+// knob screen: black disc, track, glowing value arc, big number and label
+function drawScreen(cv, mode, value, color = mode.c) {
+  const g = cv.getContext('2d'), s = cv.width, c = s / 2;
+  g.clearRect(0, 0, s, s);
+  g.fillStyle = '#000'; g.beginPath(); g.arc(c, c, c, 0, Math.PI * 2); g.fill();
+  const a0 = Math.PI * .75, span = Math.PI * 1.5, p = (value - mode.min) / (mode.max - mode.min);
+  g.lineCap = 'round'; g.lineWidth = s * .045;
+  g.strokeStyle = '#ffffff14'; g.beginPath(); g.arc(c, c, c * .78, a0, a0 + span); g.stroke();
+  g.shadowColor = `rgba(${color},.9)`; g.shadowBlur = s * .05;
+  g.strokeStyle = `rgb(${color})`; g.beginPath(); g.arc(c, c, c * .78, a0, a0 + span * Math.max(.002, p)); g.stroke();
+  g.shadowBlur = 0;
+  g.fillStyle = '#f5f5f7'; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+  g.font = `700 ${s * .25}px "Inter Tight", Inter, sans-serif`;
+  const txt = (mode.step < 1 ? value.toFixed(1) : Math.round(value)) + mode.unit;
+  g.fillText(txt, c, c + s * .08);
+  g.fillStyle = `rgb(${color})`; g.font = `600 ${s * .07}px Inter, sans-serif`;
+  g.fillText(mode.name.toUpperCase(), c, c + s * .22);
+}
+
+await document.fonts.ready;
+
+// ---------------------------------------------------------------- hero
+const scr = Object.assign(document.createElement('canvas'), { width: 512, height: 512 });
+let cur = 0, hero = null;
+const dots = document.querySelector('.modes-dots');
+MODES.forEach((m, i) => {
+  const b = document.createElement('button'); b.style.setProperty('--c', m.c);
+  b.innerHTML = `<i></i>${m.name}`; b.setAttribute('aria-pressed', i === cur);
+  b.onclick = () => setMode(i, true); dots.append(b);
+});
+function render() {
+  const m = MODES[cur];
+  drawScreen(scr, m, m.v);
+  drawScreen(document.getElementById('flatScreen'), m, m.v);
+  hero?.screenChanged();
+}
+function setMode(i, fromUi) {
+  cur = (i + MODES.length) % MODES.length;
+  [...dots.children].forEach((b, k) => b.setAttribute('aria-pressed', k === cur));
+  setGlow(MODES[cur].c); hero?.setGlow(MODES[cur].c);
+  if (fromUi) hero?.hop();
+  render();
+}
+
+// speech line at the top edge of the knob, never over the headline
+const bub = document.getElementById('bubble'); let bubUntil = 0;
+function say(text, ms = 2400) {
+  bub.textContent = text; bub.classList.add('on'); bubUntil = performance.now() + ms;
+  (function place() {
+    if (!hero) return;
+    const p = hero.project(0.55, 0.2, 0.3), st = document.getElementById('slot'), narrow = st.clientWidth < 560;
+    // on a narrow screen the knob fills the width: the line moves to the stage corner so it never covers the number
+    const x = narrow ? st.clientWidth - bub.offsetWidth - 12 : Math.max(12, Math.min(p.x + 8, st.clientWidth - bub.offsetWidth - 12));
+    const y = narrow ? 0 : Math.max(0, p.y - bub.offsetHeight);
+    bub.style.transform = `translate(${x | 0}px,${y | 0}px)`;
+    if (performance.now() < bubUntil) requestAnimationFrame(place); else bub.classList.remove('on');
+  })();
+}
+
+render();
+setGlow(MODES[cur].c);
+try {
+  const { mountHero } = await import('../assets/night-glass-3d.js');
+  let acc = 0, spun = 0;
+  hero = await mountHero(document.getElementById('stage'), {
+    model: 'puck', screen: scr, anchor: document.getElementById('slot'), glow: MODES[cur].c,
+    onSpin: d => {   // turning the knob changes the value
+      const m = MODES[cur]; acc += d * 6;
+      while (Math.abs(acc) >= 1) { const s = Math.sign(acc); acc -= s; m.v = Math.max(m.min, Math.min(m.max, +(m.v + s * m.step).toFixed(1))); }
+      spun += Math.abs(d); render();
+      if (spun > 9) { spun = 0; say('Whoa, I\'m getting dizzy…', 1800); }
+    },
+    onTap: () => { setMode(cur + 1); say(MODES[cur].name + ': turn me', 1600); },
+    onPowered: () => say('Hi! Give me a spin', 2600),
+  });
+} catch (e) {
+  document.getElementById('slot').classList.add('no-gl');
+}
+
+// ---------------------------------------------------------------- tiles and before/after
+for (const cv of document.querySelectorAll('canvas[data-mode]')) {
+  const m = MODES[+cv.dataset.mode]; drawScreen(cv, m, cv.dataset.value ? +cv.dataset.value : m.v);
+}
+
+// ---------------------------------------------------------------- scenes: color and mode
+const look = { color: SWATCHES[0][1], mode: 0 };
+const sw = document.querySelector('.swatch'), ch = document.querySelector('#scenes .chips');
+const drawLook = () => {
+  const m = MODES[look.mode];
+  drawScreen(document.getElementById('lookScreen'), m, m.v, look.color);
+  document.getElementById('lookDial').style.setProperty('--c', look.color);
+};
+SWATCHES.forEach(([name, c], i) => {
+  const b = document.createElement('button'); b.style.setProperty('--c', c); b.setAttribute('aria-label', name); b.setAttribute('aria-pressed', i === 0);
+  b.onclick = () => { look.color = c; [...sw.children].forEach(x => x.setAttribute('aria-pressed', x === b)); drawLook(); };
+  sw.append(b);
+});
+MODES.forEach((m, i) => {
+  const b = document.createElement('button'); b.className = 'btn'; b.textContent = m.name; b.setAttribute('aria-pressed', i === 0);
+  b.onclick = () => { look.mode = i; [...ch.children].forEach(x => x.setAttribute('aria-pressed', x === b)); drawLook(); };
+  ch.append(b);
+});
+drawLook();
+
+// buy buttons go nowhere in the demo
+document.querySelectorAll('.tier .btn').forEach(b => b.addEventListener('click', e => { e.preventDefault(); toast('This is a demo. Orbi doesn\'t exist'); }));
+</script>
+</body>
+</html>

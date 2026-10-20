@@ -1,0 +1,39 @@
+/* Night Glass -> shadcn/ui variables (v4, Tailwind v4). Paste after night-glass.css in globals.css,
+   so Flexnative (@flx) blocks and shadcn components immediately pick up the system's palette and radii.
+   Dark style only: put class="dark" on <html> and keep these values in both :root and .dark. */
+:root, .dark {
+  --background: #050506;
+  --foreground: #f5f5f7;
+  --card: #0c0c0f;
+  --card-foreground: #f5f5f7;
+  --popover: #16161b;
+  --popover-foreground: #f5f5f7;
+  --primary: var(--acc);
+  --primary-foreground: var(--on-acc);
+  --secondary: #1a1a1f;
+  --secondary-foreground: #f5f5f7;
+  --muted: #111115;
+  --muted-foreground: #86868b;
+  --accent: #1d1d22;
+  --accent-foreground: #f5f5f7;
+  --destructive: #ff6b5e;
+  --border: #1c1c20;
+  --input: #26262b;
+  --ring: rgba(var(--acc-rgb), .85);
+  --radius: 14px;              /* sm 10 · md 12 · lg 14 · xl 18 on the shadcn scale; override cards with rounded-[22px] */
+  --chart-1: var(--acc);
+  --chart-2: #6cc4ff;
+  --chart-3: #5fe3b4;
+  --chart-4: #ffb547;
+  --chart-5: #ff7aa8;
+  --sidebar: #0a0a0d;
+  --sidebar-foreground: #f5f5f7;
+  --sidebar-primary: var(--acc);
+  --sidebar-primary-foreground: var(--on-acc);
+  --sidebar-accent: #ffffff10;
+  --sidebar-accent-foreground: #f5f5f7;
+  --sidebar-border: #1c1c20;
+  --sidebar-ring: rgba(var(--acc-rgb), .85);
+}
+/* shadcn buttons as capsules, like the system; for "liquid glass" add the .btn class to the component (and .pri for primary) */
+[data-slot=button]{border-radius:999px}
