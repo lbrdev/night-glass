@@ -16,7 +16,7 @@
 <style>
 /* the page's own sections only; tokens and components come from night-glass.css */
 .hero-stage .flat{display:none;place-items:center;height:100%}
-.no-gl .flat{display:grid}.no-gl canvas{display:none}
+.no-gl .flat{display:grid}.no-gl .hero-canvas,.hero.no-gl .hero-canvas{display:none}
 </style>
 </head>
 <body>
@@ -33,12 +33,12 @@
 </nav>
 
 <header class="hero" id="top">
+  <canvas class="hero-canvas" id="stage" aria-label="[What the object is and how to play with it]"></canvas>
   <div class="hero-top">
     <p class="eyebrow rv" style="--d:.05s">[Product] · [category]</p>
     <h1 class="display"><span class="rv" style="--d:.17s">[First line.]</span><span class="rv" style="--d:.29s">[Second line.]</span></h1>
   </div>
   <div class="hero-stage" id="slot">
-    <canvas id="stage" aria-label="[What the object is and how to play with it]"></canvas>
     <div class="flat"><!-- flat fallback view of the object without WebGL --></div>
     <div class="bubble" id="bubble" role="status"></div>
   </div>
@@ -129,7 +129,7 @@ import { setGlow, toast } from './night-glass.js';
 try {
   const { mountHero } = await import('./night-glass-3d.js');
   await mountHero(document.getElementById('stage'), { model: 'slab', anchor: document.getElementById('slot') });
-} catch { document.getElementById('slot').classList.add('no-gl'); }
+} catch { document.getElementById('slot').classList.add('no-gl'); document.getElementById('stage').hidden = true; }
 </script>
 </body>
 </html>

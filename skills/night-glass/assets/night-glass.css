@@ -202,7 +202,8 @@ a.card:hover{border-color:#ffffff24;transform:translateY(-2px)}
 .hero{position:relative;min-height:max(640px,100svh);overflow:hidden;display:grid;grid-template-rows:auto minmax(220px,1fr) auto;padding-top:calc(var(--nav) - 10px);
   background:radial-gradient(60% 50% at 50% 56%,rgba(var(--glow),.22),transparent 70%),radial-gradient(120% 80% at 50% 120%,#111116,transparent 60%);transition:background 1.2s}
 .hero-top{text-align:center;padding:5vh var(--pad) 0;position:relative;z-index:1}
-.hero-stage{position:relative;min-height:220px}
+.hero-stage{position:relative;min-height:220px;pointer-events:none}   /* the free row the object is framed in; the canvas itself lies under the whole hero */
+.hero>canvas.hero-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;touch-action:pan-y}   /* the object can hop up behind the headline: text stays on top */
 .hero-stage>canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y}
 .hero-bottom{text-align:center;padding:0 var(--pad) calc(28px + env(safe-area-inset-bottom));position:relative;z-index:1}
 .hero-bottom .lead{margin:0 auto 22px;max-width:560px;color:var(--dim-glow)}   /* over the glow, gray is lighter */
@@ -654,7 +655,7 @@ html:has(dialog[open]){overflow:hidden}
 }
 @media print{
   *,*::before,*::after{background:#fff!important;color:#000!important;box-shadow:none!important;text-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
-  .nav,.tabbar,.toasts,.bubble,.skip,.hero-stage canvas,.burger{display:none!important}
+  .nav,.tabbar,.toasts,.bubble,.skip,.hero-stage canvas,.hero-canvas,.burger{display:none!important}
   .hero{min-height:0}
   .rv{opacity:1!important;transform:none!important;animation:none!important}
   :is(.btn,.glass,.card,.step,.tier,.offer,.stat,.chart-card){border:1px solid #999!important}

@@ -11,7 +11,7 @@ Skill files (`<skill>` = the folder with this SKILL.md):
 - `reference/DESIGN.md` — the full description: principles, tokens, typography, layout, depth, shapes, components, do's and don'ts. **Read it before you start.**
 - `assets/night-glass.css` — tokens + all components (`.nav .hero .btn .glass .card .tiles .split .vs .facts .steps .cards .rail .offer .tiers .faq .foot .sheet .toast .bubble .input .seg .sw .rv`).
 - `assets/night-glass.js` — glass highlight that follows the cursor, `.rv` reveal, burger and section highlight in the header, `setGlow('r,g,b')`, `toast()`.
-- `assets/night-glass-3d.js` — `mountHero(canvas, {model:'puck'|'slab'|builder, screen, anchor, onTap, onSpin, onPowered})` → `{setGlow, hop, screenChanged, project}`.
+- `assets/night-glass-3d.js` — `mountHero(canvas, {model:'puck'|'slab'|builder, screen, anchor, onTap, onSpin, onPowered})` → `{setGlow, hop, screenChanged, project}`. Put the canvas under the whole hero (`<canvas class="hero-canvas">` as the first child of `.hero`) and pass the `.hero-stage` row as `anchor`: the object is framed in that row but can hop up behind the headline, text on top.
 - `assets/night-glass-charts.js` — dependency-free SVG charts: `lineChart`, `barChart`, `donutChart`, `sparkline`, `dataTable` (tooltips, keyboard, entrance animation, table view). Series colors are `--chart-1…6`; a single series uses the accent.
 - `assets/tailwind.css` (v4 `@theme`), `assets/tailwind.preset.js` (v3), `assets/shadcn-theme.css` (shadcn/ui variables).
 - `templates/landing.html` — a showcase skeleton with placeholders (put the assets next to the page).

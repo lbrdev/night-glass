@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.3 — 2026-10-20
+- Hero 3D canvas now lies under the whole hero (`canvas.hero-canvas` as a direct child of `.hero`), so the object can hop up behind the headline instead of being clipped by its row; the text stays on top. The camera still frames the object in the free `.hero-stage` row.
+
 ## 1.7.2 — 2026-10-20
 - 3D dial follows the finger 1:1: the cursor is cast onto the plane of the dial face, so the rim turns by exactly the angle you moved, even on a tilted, foreshortened dial. No inertia after release; the dial stops following the pointer while you hold it. `onSpin` may return `false` to act as an end stop (the rim then holds).
 

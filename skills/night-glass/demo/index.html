@@ -16,7 +16,7 @@ body{font-size:17px}
 .hero .display{margin-top:2px}
 .hero-stage .flat{display:none;place-items:center;height:100%}
 .no-gl .flat{display:grid}
-.no-gl canvas{display:none}
+.no-gl .hero-canvas,.hero.no-gl .hero-canvas{display:none}
 .modes-dots{display:flex;gap:8px;justify-content:center;margin:0 0 18px}
 .modes-dots button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 10px;border-radius:999px;font-size:13.5px;color:var(--dim);transition:background .2s,color .2s}
 .modes-dots button i{width:8px;height:8px;border-radius:50%;background:rgb(var(--c))}
@@ -68,12 +68,12 @@ body{font-size:17px}
 </nav>
 
 <header class="hero" id="top">
+  <canvas class="hero-canvas" id="stage" aria-label="Orbi knob in 3D: drag to spin it, click to change mode"></canvas>
   <div class="hero-top">
     <p class="eyebrow rv" style="--d:.05s">Orbi Dial · the knob for your smart home</p>
     <h1 class="display"><span class="rv" style="--d:.17s">One turn.</span><span class="rv" style="--d:.29s">Whole home.</span></h1>
   </div>
   <div class="hero-stage" id="slot">
-    <canvas id="stage" aria-label="Orbi knob in 3D: drag to spin it, click to change mode"></canvas>
     <div class="flat"><div class="dial" style="width:min(62vw,300px)"><canvas id="flatScreen" width="480" height="480"></canvas></div></div>
     <div class="bubble" id="bubble" role="status"></div>
   </div>
@@ -240,7 +240,8 @@ function say(text, ms = 2400) {
   bub.textContent = text; bub.classList.add('on'); bubUntil = performance.now() + ms;
   (function place() {
     if (!hero) return;
-    const p = hero.project(0.55, 0.2, 0.3), st = document.getElementById('slot'), narrow = st.clientWidth < 560;
+    const st = document.getElementById('slot'), narrow = st.clientWidth < 560, off = st.getBoundingClientRect().top - document.getElementById('stage').getBoundingClientRect().top;
+    const p = hero.project(0.55, 0.2, 0.3); p.y -= off;   // the canvas covers the whole hero, the bubble lives in the slot row
     // on a narrow screen the knob fills the width: the line moves to the stage corner so it never covers the number
     const x = narrow ? st.clientWidth - bub.offsetWidth - 12 : Math.max(12, Math.min(p.x + 8, st.clientWidth - bub.offsetWidth - 12));
     const y = narrow ? 0 : Math.max(0, p.y - bub.offsetHeight);
@@ -266,7 +267,7 @@ try {
     onPowered: () => say('Hi! Give me a spin', 2600),
   });
 } catch (e) {
-  document.getElementById('slot').classList.add('no-gl');
+  document.getElementById('slot').classList.add('no-gl'); document.getElementById('stage').hidden = true;
 }
 
 // ---------------------------------------------------------------- tiles and before/after
