@@ -1,6 +1,6 @@
 {
   "name": "night-glass",
-  "version": "1.7.6",
+  "version": "1.7.7",
   "private": true,
   "description": "Night Glass: a design system for dark product showcases and a Claude Code plugin. This package holds only the demo page tests.",
   "type": "module",

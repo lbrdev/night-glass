@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.7 — 2026-10-21
+- README with screenshots and a dial animation, a social preview card, install via `npx skills add lbrdev/night-glass`.
+- The skill description and docs no longer refer to any outside site.
+
 ## 1.7.6 — 2026-10-20
 - Smooth scrolling in in-app browsers (Telegram, Instagram). They resize the web view while you scroll, and the `100svh` hero grew and shrank with it, shoving the page by a toolbar height. On touch screens the hero height (`--vh-stable`, set by `night-glass.js`) is now taken at load and refreshed only when the width changes; with a mouse it still follows the window.
 - 3D hero on touch screens: no scroll-linked tilt (scroll runs ahead of the render frame there, so the object shook against the page), pixel ratio capped at 1.5, and a resize that doesn't change the canvas no longer reallocates the WebGL buffer.
