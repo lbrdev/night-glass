@@ -33,8 +33,11 @@ The hero holds a real three.js object, not a picture. It rises in, looks at the 
 
 ```js
 import { mountHero } from './night-glass-3d.js';
-const hero = await mountHero(canvas, { model: 'puck' });          // or 'slab', or your own .glb
-// const hero = await mountHero(canvas, { model: { url: 'product.glb', screen: 'Screen' } });
+// built-in models: 'puck' or 'slab'
+const hero = await mountHero(canvas, { model: 'puck' });
+
+// or your own .glb, with a live picture on its screen mesh
+await mountHero(canvas, { model: { url: 'product.glb', screen: 'Screen' } });
 ```
 
 <br>
