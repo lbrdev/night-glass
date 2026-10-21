@@ -1,26 +1,100 @@
+<div align="center">
+
 # Night Glass
 
-A design system for Claude Code: a dark product showcase where the product is a living character and the interface around it is quiet glass.
+**A dark, glassy design system for product showcases — packaged as a Claude Code plugin.**
+Near-black canvas, one accent, liquid-glass controls, a live 3D object in the hero and spring motion everywhere.
 
-- near-black background, a single accent, Inter Tight / Inter (Google Fonts, Cyrillic included);
-- "liquid glass" buttons: a highlight and parallax that follow the cursor, a springy press;
-- charts, meters, tabs, a tab bar, tables and forms for dashboards in the same style;
-- a floating glass header, generous spacing, cascading reveal of blocks;
-- a live 3D object in the hero on three.js: it floats up, looks at the cursor, spins with inertia and lights the page with its screen;
-- tokens as CSS variables, Tailwind v3/v4 presets, a shadcn/ui theme.
+[![Live demo](https://img.shields.io/badge/live_demo-lbrdev.github.io-ff9f5a?style=flat-square)](https://lbrdev.github.io/night-glass/)
+[![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-a98bff?style=flat-square)](#install-in-claude-code)
+[![Version](https://img.shields.io/github/package-json/v/lbrdev/night-glass?style=flat-square&color=6cc4ff)](CHANGELOG.md)
+[![License: MIT](https://img.shields.io/badge/license-MIT-white?style=flat-square)](LICENSE)
 
-**Live demos:** https://lbrdev.github.io/night-glass/ — the Orbi showcase and three pages with every component (blocks 01–45).
+[**Live demo**](https://lbrdev.github.io/night-glass/demo/index.html) ·
+[Kit 01–10](https://lbrdev.github.io/night-glass/demo/kit.html) ·
+[Kit 11–21](https://lbrdev.github.io/night-glass/demo/kit-2.html) ·
+[Kit 22–45](https://lbrdev.github.io/night-glass/demo/kit-3.html)
+
+<br>
+
+<img src="docs/images/hero.webp" alt="Orbi demo: a dark hero with a glowing 3D dial under the headline One turn. Whole home." width="100%">
+
+</div>
+
+<br>
+
+## The product is the character
+
+The hero holds a real three.js object, not a picture. It rises in, looks at the cursor, breathes, and lights the page with its own screen. Turn it with a circular gesture and the value follows your finger 1:1.
+
+<div align="center">
+<img src="docs/images/dial.webp" alt="Animated: the 3D dial rises in and is turned clockwise from 72% to 96%" width="640">
+</div>
+
+```js
+import { mountHero } from './night-glass-3d.js';
+const hero = await mountHero(canvas, { model: 'puck' });          // or 'slab', or your own .glb
+// const hero = await mountHero(canvas, { model: { url: 'product.glb', screen: 'Screen' } });
+```
+
+<br>
+
+## What you get
+
+<table>
+<tr>
+<td width="50%" valign="top">
+<img src="docs/images/modes.webp" alt="Three glowing dials for light, music and climate">
+<p><b>Showcase sections</b><br>Feature tiles, side-by-side views, comparisons, pricing, FAQ, CTA strips — each block glows in its own content color.</p>
+</td>
+<td width="50%" valign="top">
+<img src="docs/images/compare.webp" alt="Comparison: an ordinary switch next to the glowing Orbi dial">
+<p><b>Comparison that lands</b><br>The loser is muted and desaturated, the winner gets the light. One rule, no extra decoration.</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="docs/images/buttons.webp" alt="Liquid-glass buttons in several variants and sizes">
+<p><b>Liquid-glass buttons</b><br>A highlight that follows the cursor, a body that leans toward it, a label that floats above the glass, a springy press.</p>
+</td>
+<td valign="top">
+<img src="docs/images/pricing.webp" alt="Pricing block with two plans, the Pro plan glowing">
+<p><b>Pricing and offers</b><br>Plans with checklists, a glowing pick, a pay-once line. Ready for a real checkout button.</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="docs/images/charts.webp" alt="Dashboard: metric cards with sparklines, a line chart and a donut">
+<p><b>Charts and metrics</b><br><code>night-glass-charts.js</code>: lines, bars, donut, sparkline and a table view. The palette is validated for contrast on a dark background.</p>
+</td>
+<td valign="top">
+<img src="docs/images/table.webp" alt="Sortable table with avatars, status pills and pagination">
+<p><b>App screens</b><br>Sortable tables, row selection, tabs, a tab bar, menus, a custom dropdown, date ranges, toasts, dialogs and a ⌘K palette.</p>
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td width="33%" align="center"><img src="docs/images/m-hero.webp" alt="Mobile hero" width="100%"></td>
+<td width="33%" align="center"><img src="docs/images/m-charts.webp" alt="Mobile charts with a floating tab bar" width="100%"></td>
+<td width="33%" align="center"><img src="docs/images/m-tabbar.webp" alt="Mobile tab bar inside a phone frame" width="100%"></td>
+</tr>
+<tr><td colspan="3" align="center"><b>Built for phones too</b> — a floating glass tab bar, touch-friendly sizes, steady scrolling in in-app browsers like Telegram.</td></tr>
+</table>
+
+<br>
 
 ## Install in Claude Code
 
-In Claude Code (terminal or app), run two commands:
+Inside Claude Code (terminal or app):
 
 ```
 /plugin marketplace add lbrdev/night-glass
 /plugin install night-glass@night-glass
 ```
 
-The same from a regular shell:
+Or from a regular shell:
 
 ```bash
 claude plugin marketplace add lbrdev/night-glass
@@ -30,55 +104,83 @@ claude plugin marketplace add lbrdev/night-glass
 claude plugin install night-glass@night-glass
 ```
 
-After Claude Code restarts, the skill loads on its own. Just ask: "make a landing page in the Night Glass style".
+Restart Claude Code and just ask: *"make a landing page in the Night Glass style"* or *"restyle this page in Night Glass"*. The skill loads on its own.
 
-To update to a new version:
+Update to a new version:
 
 ```bash
 claude plugin update night-glass@night-glass
 ```
 
-### Without the plugin
+<details>
+<summary><b>Without the plugin</b></summary>
 
-You can also install the skill by simply copying the folder:
+Copy the skill folder:
 
 ```bash
 git clone https://github.com/lbrdev/night-glass && cp -r night-glass/skills/night-glass ~/.claude/skills/
 ```
 
+Or use the CSS and JS directly in any project: they have no dependencies apart from three.js for the 3D hero.
+
+</details>
+
+<br>
+
+## Use it without Claude
+
+```html
+<link rel="stylesheet" href="night-glass.css">
+<script type="module" src="night-glass.js"></script>
+
+<button class="btn pri">Buy from $79</button>
+<button class="btn">See what it does</button>
+```
+
+| You want | Take |
+| --- | --- |
+| Plain CSS | `assets/night-glass.css` — tokens as CSS variables plus every component |
+| Tailwind v4 | `assets/tailwind.css` (`@theme`) |
+| Tailwind v3 | `assets/tailwind.preset.js` |
+| shadcn/ui | `assets/shadcn-theme.css` — drop-in variables |
+| A starting page | `templates/landing.html` — a showcase skeleton with placeholders |
+
+<br>
+
 ## What's inside
 
 ```
 skills/night-glass/
-  SKILL.md                 how Claude works with the system
-  reference/DESIGN.md      principles, tokens, components, do's and don'ts
-  assets/night-glass.css   tokens + all components
-  assets/night-glass.js    button highlight and parallax, reveal, header, setGlow, toast
-  assets/night-glass-3d.js 3D hero: mountHero(canvas, { model: 'puck' | 'slab' | your own })
-  assets/night-glass-charts.js charts: lines, bars, donut, sparkline, table view
-  assets/tailwind.css      Tailwind v4 (@theme)
-  assets/tailwind.preset.js  Tailwind v3
-  assets/shadcn-theme.css  shadcn/ui variables (Flexnative @flx blocks fit)
-  templates/landing.html   showcase skeleton with placeholders
-  demo/index.html          demo on the fictional Orbi product
-  demo/kit.html            test page: tokens, buttons, forms, 3D, showcase sections
-  demo/kit-2.html          test page 2: charts, tabs, tab bar, table, dashboard
-  demo/kit-3.html          test page 3: dialogs, menus, toasts, site sections, app elements, 3D from .glb
+  SKILL.md                     how Claude works with the system
+  reference/DESIGN.md          principles, tokens, components, do's and don'ts
+  assets/night-glass.css       tokens + all components
+  assets/night-glass.js        glass highlight, button parallax, reveal, header, setGlow, toast, dialogs, menus
+  assets/night-glass-3d.js     3D hero: mountHero(canvas, { model: 'puck' | 'slab' | your .glb })
+  assets/night-glass-charts.js lines, bars, donut, sparkline, table view
+  assets/tailwind.css          Tailwind v4 (@theme)
+  assets/tailwind.preset.js    Tailwind v3
+  assets/shadcn-theme.css      shadcn/ui variables
+  templates/landing.html       showcase skeleton
+  demo/index.html              the Orbi showcase (a fictional product)
+  demo/kit*.html               every component, blocks 01–45
 ```
 
-## Try the demos
+<br>
 
-Modules and importmap don't work over `file://`, so you need any local server:
+## Run the demos locally
+
+Modules and the import map need a server, not `file://`:
 
 ```bash
 cd skills/night-glass && python -m http.server 8000
 ```
 
-Then open `http://localhost:8000/demo/kit.html` and `http://localhost:8000/demo/kit-2.html` (all components) and `http://localhost:8000/demo/index.html` (the Orbi showcase).
+Then open `http://localhost:8000/demo/index.html`.
 
-## Tests
+<details>
+<summary><b>Tests</b></summary>
 
-The repository has automated tests for the demo pages, built on Playwright Test:
+Playwright Test covers the demo pages: smoke tests (no console errors, no horizontal scroll, dialogs, date menus, dropdown, code sign-in) and visual comparisons against a reference you create on your own machine.
 
 ```bash
 npm i
@@ -92,22 +194,20 @@ npx playwright install chromium
 npm run test:smoke
 ```
 
-The smoke tests check that pages open without errors or horizontal scroll, and that dialogs, date menus, the dropdown and code sign-in work. The visual tests compare pages with a reference screenshot. The reference depends on fonts and the OS, so you create it once on your own machine:
-
 ```bash
 npm run test:update
 ```
 
-After that, `npm test` shows what changed on the pages. Live parts (3D, running bars, time) are masked.
+After that, `npm test` shows what changed. Live parts (3D, animated bars, time) are masked.
 
-## Your own 3D models
+</details>
 
-```js
-const hero = await mountHero(canvas, { model: { url: 'product.glb', screen: 'Screen' } });
-```
+<br>
 
-The model is centered and scaled automatically; if you give the name of the screen mesh, a live picture from the `screen` canvas is mapped onto it. For an example that loads your own file, see block 45 on `demo/kit-3.html`.
+## Credits
+
+Fonts are Inter and Inter Tight (SIL Open Font License).
 
 ## License
 
-MIT.
+[MIT](LICENSE)
