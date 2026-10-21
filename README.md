@@ -215,7 +215,7 @@ After that, `npm test` shows what changed. Live parts (3D, animated bars, time) 
 
 ## Credits
 
-Fonts are Inter and Inter Tight (SIL Open Font License).
+Fonts are Inter and Inter Tight (SIL Open Font License). 3D rendering by [three.js](https://threejs.org).
 
 ## License
 
