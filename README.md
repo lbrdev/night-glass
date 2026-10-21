@@ -116,9 +116,15 @@ claude plugin update night-glass@night-glass
 ```
 
 <details>
-<summary><b>Without the plugin</b></summary>
+<summary><b>Other agents, or without the plugin</b></summary>
 
-Copy the skill folder:
+Install the skill into Claude Code, Cursor, Codex and other agents that read skills:
+
+```bash
+npx skills add lbrdev/night-glass
+```
+
+Or copy the skill folder:
 
 ```bash
 git clone https://github.com/lbrdev/night-glass && cp -r night-glass/skills/night-glass ~/.claude/skills/
